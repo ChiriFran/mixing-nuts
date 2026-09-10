@@ -1,4 +1,4 @@
-import { collection, getDocs, doc, getDoc, setDoc, updateDoc, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, updateDoc, query, orderBy, runTransaction } from 'firebase/firestore';
 import { db } from './firebase';
 
 const ORDERS_COLLECTION = 'ordenes';
@@ -14,16 +14,24 @@ export const createOrder = async (order, cartItems) => {
     createdAt: new Date().toISOString(),
   };
 
-  await setDoc(orderRef, orderData);
+  await runTransaction(db, async (transaction) => {
+    const productRefs = cartItems.map((item) => doc(db, PRODUCTS_COLLECTION, item.id));
+    const productSnapshots = await Promise.all(productRefs.map((productRef) => transaction.get(productRef)));
 
-  for (const item of cartItems) {
-    const productRef = doc(db, PRODUCTS_COLLECTION, item.id);
-    const productSnap = await getDoc(productRef);
-    if (productSnap.exists()) {
-      const currentStock = productSnap.data().stock || 0;
-      await updateDoc(productRef, { stock: Math.max(0, currentStock - item.cantidad) });
-    }
-  }
+    productSnapshots.forEach((productSnap, index) => {
+      const item = cartItems[index];
+      const stock = productSnap.exists() ? Number(productSnap.data().stock) || 0 : 0;
+      if (!productSnap.exists() || stock < item.cantidad) {
+        throw new Error(`STOCK_INSUFFICIENT:${item.nombre}`);
+      }
+    });
+
+    transaction.set(orderRef, orderData);
+    productSnapshots.forEach((productSnap, index) => {
+      const productRef = productRefs[index];
+      transaction.update(productRef, { stock: (Number(productSnap.data().stock) || 0) - cartItems[index].cantidad });
+    });
+  });
 
   return orderData;
 };
@@ -47,13 +55,19 @@ export const updateOrderStatus = async (id, status) => {
 };
 
 export const restoreStock = async (order) => {
-  for (const item of order.productos) {
-    const productRef = doc(db, PRODUCTS_COLLECTION, item.productId);
-    const productSnap = await getDoc(productRef);
-    if (productSnap.exists()) {
-      const currentStock = productSnap.data().stock || 0;
-      await updateDoc(productRef, { stock: currentStock + item.cantidad });
-    }
-  }
-  await updateOrderStatus(order.id, 'cancelada');
+  await runTransaction(db, async (transaction) => {
+    const productRefs = order.productos.map((item) => doc(db, PRODUCTS_COLLECTION, item.productId));
+    const productSnapshots = await Promise.all(productRefs.map((productRef) => transaction.get(productRef)));
+
+    productSnapshots.forEach((productSnap, index) => {
+      if (productSnap.exists()) {
+        const currentStock = Number(productSnap.data().stock) || 0;
+        transaction.update(productRefs[index], {
+          stock: currentStock + order.productos[index].cantidad,
+        });
+      }
+    });
+
+    transaction.update(doc(db, ORDERS_COLLECTION, order.id), { estado: 'cancelada' });
+  });
 };

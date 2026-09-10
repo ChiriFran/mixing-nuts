@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { subscribeToProducts } from '../services/products';
 
 const CartContext = createContext();
 
@@ -17,6 +18,25 @@ export const CartProvider = ({ children }) => {
   const [toast, setToast] = useState(null);
 
   useEffect(() => {
+    const unsubscribe = subscribeToProducts((products) => {
+      const productsById = new Map(products.map((product) => [product.id, product]));
+      setItems((prev) => prev
+        .map((item) => {
+          const currentProduct = productsById.get(item.id);
+          if (!currentProduct) return null;
+          const stock = Math.max(0, Number(currentProduct.stock) || 0);
+          return { ...item, ...currentProduct, cantidad: Math.min(item.cantidad, stock) };
+        })
+        .filter((item) => item && item.cantidad > 0)
+      );
+    }, (error) => {
+      console.error('Error syncing product stock:', error);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
   }, [items]);
 
@@ -25,18 +45,31 @@ export const CartProvider = ({ children }) => {
   }, []);
 
   const addToCart = useCallback((product, quantity = 1) => {
+    const availableStock = Math.max(0, Number(product.stock) || 0);
+    if (availableStock < 1) {
+      showToast('Este producto ya no tiene stock disponible', 'error');
+      return false;
+    }
+
+    const existing = items.find((item) => item.id === product.id);
+    if (existing && existing.cantidad >= availableStock) {
+      showToast(`Solo hay ${availableStock} unidad(es) disponible(s)`, 'error');
+      return false;
+    }
+
     setItems((prev) => {
       const existing = prev.find((item) => item.id === product.id);
       if (existing) {
-        const newQty = Math.min(existing.cantidad + quantity, product.stock);
+        const newQty = Math.min(existing.cantidad + quantity, availableStock);
         return prev.map((item) =>
           item.id === product.id ? { ...item, cantidad: newQty } : item
         );
       }
-      return [...prev, { ...product, cantidad: Math.min(quantity, product.stock) }];
+      return [...prev, { ...product, cantidad: Math.min(quantity, availableStock) }];
     });
     showToast(`${product.nombre} agregado al carrito`);
-  }, [showToast]);
+    return true;
+  }, [items, showToast]);
 
   const removeFromCart = useCallback((productId) => {
     setItems((prev) => prev.filter((item) => item.id !== productId));
@@ -46,7 +79,7 @@ export const CartProvider = ({ children }) => {
     setItems((prev) =>
       prev.map((item) =>
         item.id === productId
-          ? { ...item, cantidad: Math.min(item.cantidad + 1, item.stock) }
+          ? { ...item, cantidad: Math.min(item.cantidad + 1, Math.max(0, Number(item.stock) || 0)) }
           : item
       )
     );

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { getFeaturedProducts } from '../../services/products';
+import { subscribeToProducts } from '../../services/products';
 import ProductCard from './ProductCard';
 import Spinner from '../ui/Spinner';
 import './FeaturedProducts.css';
@@ -11,9 +11,14 @@ const FeaturedProducts = ({ limit = 4 }) => {
   const sectionRef = useRef(null);
 
   useEffect(() => {
-    getFeaturedProducts().then((products) => {
-      setFeaturedProducts(products.slice(0, limit));
-    }).finally(() => setLoading(false));
+    const unsubscribe = subscribeToProducts((products) => {
+      setFeaturedProducts(products.filter((product) => product.destacado && product.activo).slice(0, limit));
+      setLoading(false);
+    }, (error) => {
+      console.error('Error loading featured products:', error);
+      setLoading(false);
+    });
+    return unsubscribe;
   }, [limit]);
 
   useEffect(() => {

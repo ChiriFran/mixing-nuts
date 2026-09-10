@@ -87,7 +87,10 @@ const Checkout = () => {
       navigate('/pedido-confirmado', { state: { order: savedOrder } });
     } catch (error) {
       console.error('Error creating order:', error);
-      alert('Hubo un error al procesar tu pedido. Intentá nuevamente.');
+      const message = error.message?.startsWith('STOCK_INSUFFICIENT:')
+        ? `El producto ${error.message.replace('STOCK_INSUFFICIENT:', '')} ya no tiene suficiente stock. Revisá tu carrito.`
+        : 'Hubo un error al procesar tu pedido. Intentá nuevamente.';
+      alert(message);
       setSubmitting(false);
     } finally {
       setLoading(false);

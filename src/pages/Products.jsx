@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { getAllProducts } from '../services/products';
+import { subscribeToProducts } from '../services/products';
 import { getAllCategories } from '../services/categories';
 import ProductCard from '../components/products/ProductCard';
 import Spinner from '../components/ui/Spinner';
@@ -21,13 +21,15 @@ const Products = () => {
 
   useEffect(() => {
     setLoading(true);
-    Promise.all([
-      getAllProducts(),
-      getAllCategories(),
-    ]).then(([productsData, categoriesData]) => {
+    const unsubscribe = subscribeToProducts((productsData) => {
       setProducts(productsData.filter((p) => p.activo));
-      setCategories(categoriesData);
-    }).finally(() => setLoading(false));
+      setLoading(false);
+    }, (error) => {
+      console.error('Error loading products:', error);
+      setLoading(false);
+    });
+    getAllCategories().then(setCategories);
+    return unsubscribe;
   }, []);
 
   useEffect(() => {

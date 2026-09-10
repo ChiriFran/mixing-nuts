@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { getAllProducts } from '../services/products';
+import { subscribeToProducts } from '../services/products';
 import { getAllCategories } from '../services/categories';
 import ProductCard from '../components/products/ProductCard';
 import FeaturedProducts from '../components/products/FeaturedProducts';
@@ -15,13 +15,15 @@ const Home = () => {
   const sectionsRef = useRef([]);
 
   useEffect(() => {
-    Promise.all([
-      getAllProducts(),
-      getAllCategories(),
-    ]).then(([products, categoriesData]) => {
+    const unsubscribe = subscribeToProducts((products) => {
       setMixProducts(products.filter((p) => p.categoria === 'Mixes' && p.activo));
-      setCategories(categoriesData);
-    }).finally(() => setLoading(false));
+      setLoading(false);
+    }, (error) => {
+      console.error('Error loading products:', error);
+      setLoading(false);
+    });
+    getAllCategories().then(setCategories);
+    return unsubscribe;
   }, []);
 
   useEffect(() => {

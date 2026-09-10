@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getProductBySlug } from '../services/products';
+import { subscribeToProductBySlug } from '../services/products';
 import { useCart } from '../context/CartContext';
 import { formatPrice } from '../utils/formatPrice';
 import FeaturedProducts from '../components/products/FeaturedProducts';
@@ -17,11 +17,13 @@ const ProductDetail = () => {
 
   useEffect(() => {
     setLoading(true);
-    getProductBySlug(slug).then((found) => {
+    setProduct(null);
+    setQuantity(1);
+    setAdded(false);
+    window.scrollTo(0, 0);
+
+    const unsubscribe = subscribeToProductBySlug(slug, (found) => {
       setProduct(found);
-      setQuantity(1);
-      setAdded(false);
-      window.scrollTo(0, 0);
 
     if (found) {
       document.title = `${found.nombre} - Mixing Nuts | Buenos Aires Zona Norte`;
@@ -100,24 +102,30 @@ const ProductDetail = () => {
       document.head.appendChild(script);
     }
 
+      setLoading(false);
+    }, (error) => {
+      console.error('Error loading product:', error);
+      setLoading(false);
+    });
+
     return () => {
+      unsubscribe();
       const script = document.getElementById('product-schema');
       if (script) script.remove();
       document.title = 'Mixing Nuts - Frutos Secos y Mixes | Buenos Aires Zona Norte';
 
       const setMeta = (name, content, property = false) => {
         const attr = property ? 'property' : 'name';
-        let el = document.querySelector(`meta[${attr}="${name}"]`);
+        const el = document.querySelector(`meta[${attr}="${name}"]`);
         if (el) el.setAttribute('content', content);
       };
 
-      setMeta('description', 'Comprá frutos secos y mixes premium en Buenos Aires, Zona Norte. Calidad superior a precios accesibles. Almendras, nueces, caju y más.', false);
+      setMeta('description', 'Comprá frutos secos y mixes premium en Buenos Aires, Zona Norte. Calidad superior a precios accesibles. Almendras, nueces, caju y más.');
       setMeta('og:title', 'Mixing Nuts - Frutos Secos y Mixes | Buenos Aires Zona Norte', true);
       setMeta('og:description', 'Comprá frutos secos y mixes premium en Buenos Aires, Zona Norte. Calidad superior a precios accesibles.', true);
       setMeta('og:image', '/images/og-image.png', true);
       setMeta('og:url', 'https://mixing-nuts.com.ar', true);
     };
-    }).finally(() => setLoading(false));
   }, [slug]);
 
   if (loading) {
