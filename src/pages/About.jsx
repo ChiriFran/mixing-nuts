@@ -20,7 +20,14 @@ const About = () => {
 
     const elements = [imageBgRef.current, ...sectionsRef.current].filter(Boolean);
     const frameId = requestAnimationFrame(() => {
-      elements.forEach((element) => observer.observe(element));
+      elements.forEach((element) => {
+        observer.observe(element);
+
+        const { top, bottom } = element.getBoundingClientRect();
+        if (top < window.innerHeight && bottom > 0) {
+          element.classList.add('is-visible');
+        }
+      });
     });
 
     return () => {

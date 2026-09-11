@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import Layout from './components/layout/Layout';
@@ -14,8 +14,22 @@ import Admin from './pages/Admin';
 function ScrollToTop() {
   const { pathname } = useLocation();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const { documentElement } = document;
+    const previousScrollBehavior = documentElement.style.scrollBehavior;
+
+    documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
     window.scrollTo(0, 0);
+
+    const restoreScrollBehavior = requestAnimationFrame(() => {
+      if (previousScrollBehavior) {
+        documentElement.style.scrollBehavior = previousScrollBehavior;
+      } else {
+        documentElement.style.removeProperty('scroll-behavior');
+      }
+    });
+
+    return () => cancelAnimationFrame(restoreScrollBehavior);
   }, [pathname]);
 
   return null;
