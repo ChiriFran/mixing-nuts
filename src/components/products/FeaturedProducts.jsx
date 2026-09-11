@@ -54,8 +54,8 @@ const FeaturedProducts = ({ limit = 4 }) => {
         </svg>
       </div>
       <div className="container">
-        <h2 className="section-title">Destacados</h2>
-        <p className="section-subtitle">Los favoritos de nuestros clientes</p>
+        <h2 className="section-title">Frutos secos y mixes más elegidos</h2>
+        <p className="section-subtitle">Descubrí los productos favoritos de nuestros clientes en Buenos Aires.</p>
         {loading ? (
           <Spinner />
         ) : (

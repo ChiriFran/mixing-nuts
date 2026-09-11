@@ -59,10 +59,10 @@ const Home = () => {
           <div className="hero__content">
             <span className="hero__tag">Frutos secos y mixes seleccionados</span>
             <h1 className="hero__title">
-              El sabor de <span className="hero__title-highlight">lo natural</span>
+              Frutos secos y mixes <span className="hero__title-highlight">en Buenos Aires</span>
             </h1>
             <p className="hero__subtitle">
-              Seleccionamos los mejores frutos secos y frutas deshidratadas para que disfrutes todos los días.
+              Comprá online almendras, nueces, cajú, maní, frutas deshidratadas y mixes premium seleccionados en Argentina.
             </p>
           </div>
           <div className="hero__visual">
@@ -91,8 +91,8 @@ const Home = () => {
       {/* Categories */}
       <section className="categories section" ref={addSectionRef}>
         <div className="container">
-          <h2 className="section-title">Explorá nuestras categorías</h2>
-          <p className="section-subtitle">Encontrá exactamente lo que buscás</p>
+          <h2 className="section-title">Comprá frutos secos, mixes y productos naturales</h2>
+          <p className="section-subtitle">Encontrá almendras, nueces, deshidratados, aceites, harinas y más en un solo lugar.</p>
           <div className="categories__grid">
             {loading ? (
               <Spinner />
@@ -121,11 +121,11 @@ const Home = () => {
             </div>
             <div className="editorial__content">
               <span className="editorial__tag">Nuestra historia</span>
-              <h2 className="editorial__title">Lo natural se disfruta mejor</h2>
+              <h2 className="editorial__title">Frutos secos seleccionados para disfrutar todos los días</h2>
               <p className="editorial__text">
-                En Mixing Nuts creemos que los mejores snacks son los que la naturaleza nos ofrece.
-                Por eso seleccionamos cada fruto seco y cada mix con dedicación, para que cada bocado
-                sea una experiencia de calidad y sabor.
+                En Mixing Nuts seleccionamos almendras, nueces, cajú, maní y frutas deshidratadas
+                para ofrecer snacks saludables con calidad y sabor. Armamos cada mix pensando en
+                tus momentos de energía, trabajo, estudio o descanso.
               </p>
               <Link to="/nosotros" className="btn btn-outline" title="Conocé nuestra historia">
                 Conocé más
@@ -141,8 +141,8 @@ const Home = () => {
       {/* Mixes Section */}
       <section className="mixes section" ref={addSectionRef}>
         <div className="container">
-          <h2 className="section-title">Elegí tu mix</h2>
-          <p className="section-subtitle">Combinaciones pensadas para cada momento</p>
+          <h2 className="section-title">Mixes de frutos secos para cada momento</h2>
+          <p className="section-subtitle">Comprá Mix Premium, Mix Completo, Mix Intermedio y otras combinaciones online.</p>
           {loading ? (
             <Spinner />
           ) : (
@@ -161,11 +161,11 @@ const Home = () => {
           <div className="editorial__grid">
             <div className="editorial__content">
               <span className="editorial__tag">Calidad garantizada</span>
-              <h2 className="editorial__title">Calidad en cada selección</h2>
+              <h2 className="editorial__title">Calidad en frutos secos y snacks saludables</h2>
               <p className="editorial__text">
                 Cada producto que llega a tus manos fue cuidadosamente seleccionado.
-                Trabajamos con proveedores de confianza para garantizar frescura,
-                sabor y nutrientes en cada presentación.
+                Trabajamos con proveedores de confianza para ofrecer frutos secos,
+                deshidratados y mixes frescos, sabrosos y prácticos.
               </p>
               <Link to="/productos" className="btn btn-outline" title="Explorar catálogo de productos">
                 Explorar productos
@@ -224,9 +224,9 @@ const Home = () => {
         </div>
         <div className="container">
           <div className="cta-final__content">
-            <h2 className="cta-final__title">¿Listo para disfrutar?</h2>
+            <h2 className="cta-final__title">Comprá frutos secos online en Buenos Aires</h2>
             <p className="cta-final__text">
-              Explorá nuestros productos y descubrí el sabor de lo natural.
+              Explorá el catálogo de Mixing Nuts y encontrá el mix o producto natural ideal para vos.
             </p>
             <Link to="/productos" className="btn btn-primary btn-lg" title="Ver catálogo completo">
               Ver catálogo completo
@@ -238,8 +238,8 @@ const Home = () => {
       {/* Testimonials */}
       <section className="testimonials section" ref={addSectionRef}>
         <div className="container">
-          <h2 className="section-title">Lo que dicen nuestros clientes</h2>
-          <p className="section-subtitle">Testimonios reales de quienes ya probieron nuestros productos</p>
+          <h2 className="section-title">Opiniones sobre nuestros frutos secos y mixes</h2>
+          <p className="section-subtitle">Testimonios reales de quienes ya probaron nuestros productos.</p>
           <MobileSlider gridClass="testimonials-grid">
             <div className="testimonial-card">
               <div className="testimonial-card__stars">★★★★★</div>
