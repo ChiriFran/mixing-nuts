@@ -66,7 +66,7 @@ const Header = () => {
           </nav>
 
           <div className="header__actions">
-            <CartIcon />
+            <CartIcon onClick={() => setMenuOpen(false)} />
             <button
               className={`header__hamburger ${menuOpen ? 'header__hamburger--open' : ''}`}
               onClick={() => setMenuOpen(!menuOpen)}
