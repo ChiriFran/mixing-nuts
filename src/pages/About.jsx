@@ -15,18 +15,18 @@ const About = () => {
           }
         });
       },
-      { threshold: 0.75 }
+      { threshold: 0.1 }
     );
 
-    if (imageBgRef.current) {
-      observer.observe(imageBgRef.current);
-    }
-
-    sectionsRef.current.forEach((section) => {
-      if (section) observer.observe(section);
+    const elements = [imageBgRef.current, ...sectionsRef.current].filter(Boolean);
+    const frameId = requestAnimationFrame(() => {
+      elements.forEach((element) => observer.observe(element));
     });
 
-    return () => observer.disconnect();
+    return () => {
+      cancelAnimationFrame(frameId);
+      observer.disconnect();
+    };
   }, []);
 
   const addSectionRef = (el) => {
