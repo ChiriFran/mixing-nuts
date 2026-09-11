@@ -10,6 +10,7 @@ import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
 import About from './pages/About';
 import Admin from './pages/Admin';
+import AdminRoute from './components/AdminRoute';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -49,7 +50,7 @@ function App() {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/pedido-confirmado" element={<OrderSuccess />} />
             <Route path="/nosotros" element={<About />} />
-            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
             <Route path="*" element={<Home />} />
           </Routes>
         </Layout>

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
+import { signOut } from 'firebase/auth';
 import { getAllOrders, updateOrderStatus, restoreStock } from '../services/orders';
+import { auth } from '../services/firebase';
 import { formatPrice } from '../utils/formatPrice';
 import './Admin.css';
 
@@ -101,8 +103,15 @@ const Admin = () => {
 
   return (
     <div className="admin container section">
-      <h1 className="admin__title">Panel de administración</h1>
-      <p className="admin__subtitle">{orders.length} pedidos registrados</p>
+      <div className="admin__heading">
+        <div>
+          <h1 className="admin__title">Panel de administración</h1>
+          <p className="admin__subtitle">{orders.length} pedidos registrados</p>
+        </div>
+        <button className="btn btn-outline btn-sm" type="button" onClick={() => signOut(auth)}>
+          Cerrar sesión
+        </button>
+      </div>
 
       <div className="admin__layout">
         <div className="admin__list">

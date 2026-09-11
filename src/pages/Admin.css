@@ -4,6 +4,13 @@
   margin-bottom: 0.25rem;
 }
 
+.admin__heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
 .admin__subtitle {
   color: var(--color-text-muted);
   margin-bottom: 2rem;
@@ -214,6 +221,11 @@
 
   .admin__title {
     font-size: 1.5rem;
+  }
+
+  .admin__heading {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .admin__layout {
