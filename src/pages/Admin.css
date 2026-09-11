@@ -107,6 +107,28 @@
   color: var(--color-text-muted);
 }
 
+.admin__whatsapp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+  color: #15803d;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.admin__whatsapp-link:hover {
+  color: #166534;
+  text-decoration: underline;
+}
+
+.admin__whatsapp-link svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
 .admin__detail {
   background: var(--color-bg);
   border: 1px solid var(--color-border);
