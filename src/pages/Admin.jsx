@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { signOut } from 'firebase/auth';
+import * as XLSX from 'xlsx';
 import { getAllOrders, updateOrderStatus, restoreStock } from '../services/orders';
 import { auth } from '../services/firebase';
 import { formatPrice } from '../utils/formatPrice';
@@ -39,6 +40,7 @@ const Admin = () => {
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const loadOrders = async () => {
@@ -63,6 +65,48 @@ const Admin = () => {
   };
 
   const closeDrawer = () => setDrawerOpen(false);
+
+  const filteredOrders = orders.filter((order) => {
+    const customerName = `${order.cliente?.nombre || ''} ${order.cliente?.apellido || ''}`.toLocaleLowerCase('es-AR');
+    return customerName.includes(searchTerm.trim().toLocaleLowerCase('es-AR'));
+  });
+
+  const handleExportOrders = () => {
+    const orderRows = orders.map((order) => ({
+      'ID pedido': order.id,
+      Estado: STATUS_LABELS[order.estado] || order.estado || '',
+      'Fecha de creación': order.createdAt || '',
+      Total: order.total ?? '',
+      'Cliente - Nombre': order.cliente?.nombre || '',
+      'Cliente - Apellido': order.cliente?.apellido || '',
+      'Cliente - Teléfono': order.cliente?.telefono || '',
+      'Cliente - Email': order.cliente?.email || '',
+      'Entrega - Tipo': order.entrega?.tipo || '',
+      'Entrega - Dirección': order.entrega?.direccion || '',
+      'Entrega - Localidad': order.entrega?.localidad || '',
+      Productos: (order.productos || [])
+        .map((item) => `${item.nombre || 'Producto'} x${item.cantidad || 0}`)
+        .join(', '),
+    }));
+
+    const productRows = orders.flatMap((order) =>
+      (order.productos || []).map((item) => ({
+        'ID pedido': order.id,
+        'Fecha de creación': order.createdAt || '',
+        Cliente: `${order.cliente?.nombre || ''} ${order.cliente?.apellido || ''}`.trim(),
+        Producto: item.nombre || '',
+        'ID producto': item.productId || '',
+        Cantidad: item.cantidad ?? '',
+        'Precio unitario': item.precio ?? '',
+        Subtotal: item.subtotal ?? '',
+      }))
+    );
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(orderRows), 'Pedidos');
+    XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(productRows), 'Productos');
+    XLSX.writeFile(workbook, `pedidos-mixing-nuts-${new Date().toISOString().slice(0, 10)}.xlsx`);
+  };
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
@@ -108,17 +152,34 @@ const Admin = () => {
           <h1 className="admin__title">Panel de administración</h1>
           <p className="admin__subtitle">{orders.length} pedidos registrados</p>
         </div>
-        <button className="btn btn-outline btn-sm" type="button" onClick={() => signOut(auth)}>
-          Cerrar sesión
-        </button>
+        <div className="admin__actions">
+          <button className="btn btn-primary btn-sm" type="button" onClick={handleExportOrders} disabled={orders.length === 0}>
+            Descargar Excel
+          </button>
+          <button className="btn btn-outline btn-sm" type="button" onClick={() => signOut(auth)}>
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
+
+      <div className="admin__toolbar">
+        <label className="admin__search-label" htmlFor="admin-order-search">Buscar por nombre</label>
+        <input
+          id="admin-order-search"
+          className="admin__search"
+          type="search"
+          placeholder="Nombre o apellido"
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
+        />
       </div>
 
       <div className="admin__layout">
         <div className="admin__list">
-          {orders.length === 0 ? (
+          {filteredOrders.length === 0 ? (
             <p className="admin__empty">No hay pedidos registrados.</p>
           ) : (
-            orders.map((order) => (
+            filteredOrders.map((order) => (
               <div
                 key={order.id}
                 className={`admin__order-card ${selectedOrder?.id === order.id ? 'admin__order-card--selected' : ''}`}
