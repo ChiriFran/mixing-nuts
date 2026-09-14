@@ -46,6 +46,16 @@
   line-height: 1.7;
 }
 
+.about .section-title {
+  padding-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .about .section-title {
+    padding-bottom: 3rem;
+  }
+}
+
 /* Content */
 .about__content {
   background-color: var(--color-white);
@@ -210,6 +220,7 @@
   text-align: center;
   max-width: 600px;
   margin: 0 auto;
+  padding-top: 2rem;
 }
 
 .about__cta-content h2 {

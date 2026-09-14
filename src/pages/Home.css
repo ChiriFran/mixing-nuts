@@ -76,13 +76,14 @@
 
 @media (min-width: 768px) {
   .hero__title {
-    font-size: var(--text-6xl);
+    font-size: var(--text-5xl);
   }
 }
 
 .hero__title-highlight {
   color: var(--color-primary);
   position: relative;
+  display: block;
 }
 
 .hero__title-highlight::after {

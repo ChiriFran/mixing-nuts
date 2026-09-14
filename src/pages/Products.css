@@ -1,6 +1,29 @@
-.products-page__header {
-  background: url('/images/about-img.png') center/cover no-repeat;
-  padding: var(--space-4xl) var(--space-md) var(--space-xl);
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.products-page__hero {
+  width: 100%;
+  overflow: hidden;
+}
+
+.products-page__hero-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.products-page__intro {
+  padding: var(--space-2xl) var(--space-md);
 }
 
 .products-page__title {
@@ -19,6 +42,7 @@
 .products-page__subtitle {
   color: var(--color-text);
   font-size: var(--text-lg);
+  font-weight: 400;
 }
 
 .products-page__toolbar {

@@ -95,11 +95,13 @@ const Products = () => {
 
   return (
     <div className="products-page">
-      <div className="products-page__header section">
-        <div className="container">
-          <h1 className="products-page__title">Nuestros productos</h1>
-          <p className="products-page__subtitle">Descubrí nuestra selección de frutos secos, mixes y más</p>
-        </div>
+      <div className="products-page__hero">
+        <img src="/images/banner-tienda.png" alt="Selección de frutos secos y mixes premium" className="products-page__hero-img" />
+      </div>
+
+      <div className="products-page__intro sr-only container">
+        <h1 className="products-page__title">Nuestra selección</h1>
+        <h2 className="products-page__subtitle">Frutos secos y mixes cuidadosamente elegidos para los paladares más exigentes</h2>
       </div>
 
       <div className="products-page__content container" ref={contentRef}>
