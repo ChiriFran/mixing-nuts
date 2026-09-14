@@ -41,6 +41,8 @@ const Admin = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('todos');
+  const [timeFilter, setTimeFilter] = useState('todos');
 
   useEffect(() => {
     const loadOrders = async () => {
@@ -68,11 +70,34 @@ const Admin = () => {
 
   const filteredOrders = orders.filter((order) => {
     const customerName = `${order.cliente?.nombre || ''} ${order.cliente?.apellido || ''}`.toLocaleLowerCase('es-AR');
-    return customerName.includes(searchTerm.trim().toLocaleLowerCase('es-AR'));
+    const matchesName = customerName.includes(searchTerm.trim().toLocaleLowerCase('es-AR'));
+    const matchesStatus = statusFilter === 'todos' || order.estado === statusFilter;
+
+    if (timeFilter === 'todos') return matchesName && matchesStatus;
+
+    const orderDate = new Date(order.createdAt);
+    if (Number.isNaN(orderDate.getTime())) return false;
+
+    const now = new Date();
+    let matchesTime = true;
+
+    if (timeFilter === 'este-mes') {
+      matchesTime = orderDate.getFullYear() === now.getFullYear()
+        && orderDate.getMonth() === now.getMonth();
+    } else if (timeFilter === 'mes-pasado') {
+      const previousMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      matchesTime = orderDate.getFullYear() === previousMonth.getFullYear()
+        && orderDate.getMonth() === previousMonth.getMonth();
+    } else if (timeFilter === 'ultimos-3-meses') {
+      const threeMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 2, 1);
+      matchesTime = orderDate >= threeMonthsAgo;
+    }
+
+    return matchesName && matchesStatus && matchesTime;
   });
 
   const handleExportOrders = () => {
-    const orderRows = orders.map((order) => ({
+    const orderRows = filteredOrders.map((order) => ({
       'ID pedido': order.id,
       Estado: STATUS_LABELS[order.estado] || order.estado || '',
       'Fecha de creación': order.createdAt || '',
@@ -89,7 +114,7 @@ const Admin = () => {
         .join(', '),
     }));
 
-    const productRows = orders.flatMap((order) =>
+    const productRows = filteredOrders.flatMap((order) =>
       (order.productos || []).map((item) => ({
         'ID pedido': order.id,
         'Fecha de creación': order.createdAt || '',
@@ -153,7 +178,7 @@ const Admin = () => {
           <p className="admin__subtitle">{orders.length} pedidos registrados</p>
         </div>
         <div className="admin__actions">
-          <button className="btn btn-primary btn-sm" type="button" onClick={handleExportOrders} disabled={orders.length === 0}>
+          <button className="btn btn-primary btn-sm" type="button" onClick={handleExportOrders} disabled={filteredOrders.length === 0}>
             Descargar Excel
           </button>
           <button className="btn btn-outline btn-sm" type="button" onClick={() => signOut(auth)}>
@@ -172,12 +197,34 @@ const Admin = () => {
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
         />
+        <select
+          className="admin__filter"
+          aria-label="Filtrar por estado"
+          value={statusFilter}
+          onChange={(event) => setStatusFilter(event.target.value)}
+        >
+          <option value="todos">Todos los estados</option>
+          {Object.entries(STATUS_LABELS).map(([key, label]) => (
+            <option key={key} value={key}>{label}</option>
+          ))}
+        </select>
+        <select
+          className="admin__filter"
+          aria-label="Filtrar por período"
+          value={timeFilter}
+          onChange={(event) => setTimeFilter(event.target.value)}
+        >
+          <option value="todos">Todo el tiempo</option>
+          <option value="este-mes">Este mes</option>
+          <option value="mes-pasado">Mes pasado</option>
+          <option value="ultimos-3-meses">Últimos 3 meses</option>
+        </select>
       </div>
 
       <div className="admin__layout">
         <div className="admin__list">
           {filteredOrders.length === 0 ? (
-            <p className="admin__empty">No hay pedidos registrados.</p>
+            <p className="admin__empty">No hay pedidos que coincidan con los filtros.</p>
           ) : (
             filteredOrders.map((order) => (
               <div
