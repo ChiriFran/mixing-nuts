@@ -194,7 +194,7 @@ const Products = () => {
               </div>
             ) : filteredProducts.length > 0 ? (
               filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.id} product={product} showDescription={false} />
               ))
             ) : (
               <div className="products-page__empty">

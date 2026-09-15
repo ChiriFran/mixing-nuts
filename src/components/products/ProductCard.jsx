@@ -3,7 +3,7 @@ import { useCart } from '../../context/CartContext';
 import { formatPrice } from '../../utils/formatPrice';
 import './ProductCard.css';
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, showDescription = true }) => {
   const { addToCart } = useCart();
 
   const handleAddToCart = (e) => {
@@ -35,7 +35,7 @@ const ProductCard = ({ product }) => {
       <div className="product-card__content">
         <span className="product-card__category">{product.categoria}</span>
         <h3 className="product-card__name">{product.nombre}</h3>
-        <p className="product-card__description">{product.descripcionCorta}</p>
+        {showDescription && <p className="product-card__description">{product.descripcionCorta}</p>}
         <div className="product-card__footer">
           <div className="product-card__pricing">
             <span className="product-card__price">{formatPrice(product.precio)}</span>
