@@ -43,6 +43,7 @@ const Admin = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('todos');
   const [timeFilter, setTimeFilter] = useState('todos');
+  const [showOverview, setShowOverview] = useState(true);
 
   useEffect(() => {
     const loadOrders = async () => {
@@ -95,6 +96,31 @@ const Admin = () => {
 
     return matchesName && matchesStatus && matchesTime;
   });
+
+  const topProduct = (() => {
+    const counts = {};
+    orders.forEach((o) => {
+      (o.productos || []).forEach((p) => {
+        const name = p.nombre || 'Producto';
+        counts[name] = (counts[name] || 0) + (p.cantidad || 1);
+      });
+    });
+    let best = null;
+    for (const [name, qty] of Object.entries(counts)) {
+      if (!best || qty > best.qty) best = { name, qty };
+    }
+    return best;
+  })();
+
+  const overviewStats = {
+    total: orders.length,
+    totalRevenue: orders.reduce((sum, o) => sum + (o.total || 0), 0),
+    pendientes: orders.filter((o) => o.estado === 'pendiente').length,
+    confirmadas: orders.filter((o) => o.estado === 'confirmada').length,
+    enviadas: orders.filter((o) => o.estado === 'enviada').length,
+    entregadas: orders.filter((o) => o.estado === 'entregada').length,
+    canceladas: orders.filter((o) => o.estado === 'cancelada').length,
+  };
 
   const handleExportOrders = () => {
     const orderRows = filteredOrders.map((order) => ({
@@ -186,6 +212,45 @@ const Admin = () => {
           </button>
         </div>
       </div>
+
+      <button
+        className="admin__overview-toggle"
+        type="button"
+        onClick={() => setShowOverview((prev) => !prev)}
+      >
+        {showOverview ? 'Ocultar resumen' : 'Mostrar resumen'}
+        <span className={`admin__overview-toggle-icon ${showOverview ? 'admin__overview-toggle-icon--open' : ''}`}>▾</span>
+      </button>
+
+      {showOverview && (
+        <div className="admin__overview">
+          <div className="admin__overview-card">
+            <span className="admin__overview-label">Pedidos</span>
+            <span className="admin__overview-value">{overviewStats.total}</span>
+          </div>
+          <div className="admin__overview-card">
+            <span className="admin__overview-label">Ingresos</span>
+            <span className="admin__overview-value">{formatPrice(overviewStats.totalRevenue)}</span>
+          </div>
+          <div className="admin__overview-card admin__overview-card--pendiente admin__overview-card--hide-mobile">
+            <span className="admin__overview-label">Pendientes</span>
+            <span className="admin__overview-value">{overviewStats.pendientes}</span>
+          </div>
+          <div className="admin__overview-card admin__overview-card--entregada">
+            <span className="admin__overview-label">Entregadas</span>
+            <span className="admin__overview-value">{overviewStats.entregadas}</span>
+          </div>
+          <div className="admin__overview-card admin__overview-card--hide-mobile">
+            <span className="admin__overview-label">Envíos activos</span>
+            <span className="admin__overview-value">{overviewStats.confirmadas + overviewStats.enviadas}</span>
+          </div>
+          <div className="admin__overview-card admin__overview-card--top">
+            <span className="admin__overview-label">Más vendido</span>
+            <span className="admin__overview-value admin__overview-value--name">{topProduct ? topProduct.name : '—'}</span>
+            <span className="admin__overview-sub">{topProduct ? `${topProduct.qty} uds vendidas` : ''}</span>
+          </div>
+        </div>
+      )}
 
       <div className="admin__toolbar">
         <label className="admin__search-label" htmlFor="admin-order-search">Buscar por nombre</label>
