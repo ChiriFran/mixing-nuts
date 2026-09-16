@@ -1,5 +1,6 @@
-import { collection, getDocs, onSnapshot, query, where } from 'firebase/firestore';
-import { db } from './firebase';
+import { collection, getDocs, onSnapshot, query, where, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db, storage } from './firebase';
 
 const PRODUCTS_COLLECTION = 'productos';
 
@@ -44,4 +45,25 @@ export const getFeaturedProducts = async () => {
   const q = query(collection(db, PRODUCTS_COLLECTION), where('destacado', '==', true), where('activo', '==', true));
   const snapshot = await getDocs(q);
   return snapshot.docs.map(mapProduct);
+};
+
+export const createProduct = async (data) => {
+  const docRef = await addDoc(collection(db, PRODUCTS_COLLECTION), data);
+  return docRef.id;
+};
+
+export const updateProduct = async (id, data) => {
+  const docRef = doc(db, PRODUCTS_COLLECTION, id);
+  await updateDoc(docRef, data);
+};
+
+export const deleteProduct = async (id) => {
+  const docRef = doc(db, PRODUCTS_COLLECTION, id);
+  await deleteDoc(docRef);
+};
+
+export const uploadProductImage = async (file, fileName) => {
+  const storageRef = ref(storage, `images/products/${fileName}`);
+  await uploadBytes(storageRef, file);
+  return getDownloadURL(storageRef);
 };
