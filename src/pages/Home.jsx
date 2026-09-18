@@ -57,12 +57,13 @@ const Home = () => {
       <section className="hero">
         <div className="hero__container container">
           <div className="hero__content">
-            <span className="hero__tag">Frutos secos y mixes seleccionados</span>
+            <span className="hero__tag">Frutos secos - mixes - mas para disfrutar</span>
             <h1 className="hero__title">
-              Frutos secos y mixes <span className="hero__title-highlight">en Buenos Aires</span>
+              Elegi rico. <span className="hero__title-highlight">Elegi Mixing Nuts</span>
             </h1>
             <p className="hero__subtitle">
-              Comprá online almendras, nueces, cajú, maní, frutas deshidratadas y mixes premium seleccionados en Argentina.
+              Frutos secos, frutas deshidratadas y mixes premium.
+              Hace tu pedido online y recibilo sin costo en zona norte.
             </p>
           </div>
           <div className="hero__visual">
@@ -85,6 +86,53 @@ const Home = () => {
             <path d="M0,80 C120,180 240,-20 360,80 C480,180 600,-20 720,80 C840,180 960,-20 1080,80 C1200,180 1320,-20 1440,80 L1440,200 L0,200Z" fill="var(--color-primary-light)" opacity="0.5"/>
             <path d="M0,100 C120,200 240,0 360,100 C480,200 600,0 720,100 C840,200 960,0 1080,100 C1200,200 1320,0 1440,100 L1440,200 L0,200Z" fill="currentColor"/>
           </svg>
+        </div>
+      </section>
+
+      {/* Benefits */}
+      <section className="benefits section" ref={addSectionRef}>
+        <div className="container">
+          <h2 className="section-title">¿Por qué Mixing Nuts?</h2>
+          <MobileSlider gridClass="benefits-grid">
+            <div className="benefit">
+              <div className="benefit__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+              </div>
+              <h3 className="benefit__title">Calidad seleccionada</h3>
+              <p className="benefit__text">Productos elegidos a mano para que disfrutes cada compra.</p>
+            </div>
+            <div className="benefit">
+              <div className="benefit__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+              </div>
+              <h3 className="benefit__title">Buenos precios</h3>
+              <p className="benefit__text">Calidad premium al mejor precio, sin gastar un peso de más.</p>
+            </div>
+            <div className="benefit">
+              <div className="benefit__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M3 7h11v10H3zM14 10h4l3 3v4h-7z"/>
+                  <circle cx="7" cy="18" r="2"/>
+                  <circle cx="17" cy="18" r="2"/>
+                </svg>
+              </div>
+              <h3 className="benefit__title">Envío sin cargo</h3>
+              <p className="benefit__text">Envío gratis en compras superiores a $35.000 en zona norte.</p>
+            </div>
+            <div className="benefit benefit--only-mobile">
+              <div className="benefit__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+              </div>
+              <h3 className="benefit__title">Entrega inmediata</h3>
+              <p className="benefit__text">Recibí tu pedido al toque: sin largas esperas ni demoras.</p>
+            </div>
+          </MobileSlider>
         </div>
       </section>
 
@@ -120,12 +168,12 @@ const Home = () => {
               <img src="/images/back-1.png" alt="Frutos secos seleccionados" title="Nuestra selección de frutos secos premium" className="editorial__img" />
             </div>
             <div className="editorial__content">
-              <span className="editorial__tag">Nuestra historia</span>
-              <h2 className="editorial__title">Frutos secos seleccionados para disfrutar todos los días</h2>
+              <span className="editorial__tag">¿Quiénes somos?</span>
+              <h2 className="editorial__title">Tu pausa saludable, a un solo click</h2>
               <p className="editorial__text">
-                En Mixing Nuts seleccionamos almendras, nueces, cajú, maní y frutas deshidratadas
-                para ofrecer snacks saludables con calidad y sabor. Armamos cada mix pensando en
-                tus momentos de energía, trabajo, estudio o descanso.
+                En Mixing Nuts creemos que elegir algo rico también puede ser simple.
+                Seleccionamos productos de calidad y variedad para que encuentres eso que buscas,
+                a buenos precios y con la comodidad de recibir tu pedido rápidamente.
               </p>
               <Link to="/nosotros" className="btn btn-outline" title="Conocé nuestra historia">
                 Conocé más
@@ -175,42 +223,6 @@ const Home = () => {
               <img src="/images/back-1.png" alt="Frutos secos seleccionados" title="Nuestra selección de frutos secos premium" className="editorial__img" />
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Benefits */}
-      <section className="benefits section" ref={addSectionRef}>
-        <div className="container">
-          <MobileSlider gridClass="benefits-grid">
-            <div className="benefit">
-              <div className="benefit__icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                </svg>
-              </div>
-              <h3 className="benefit__title">Calidad asegurada</h3>
-              <p className="benefit__text">Seleccionamos cada producto con estándares estrictos de calidad.</p>
-            </div>
-            <div className="benefit">
-              <div className="benefit__icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
-                </svg>
-              </div>
-              <h3 className="benefit__title">Hecho con pasión</h3>
-              <p className="benefit__text">Amamos lo que hacemos y se nota en cada detalle.</p>
-            </div>
-            <div className="benefit">
-              <div className="benefit__icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <circle cx="12" cy="12" r="10"/>
-                  <path d="M12 6v6l4 2"/>
-                </svg>
-              </div>
-              <h3 className="benefit__title">Envío rápido</h3>
-              <p className="benefit__text">Recibí tu pedido en el menor tiempo posible.</p>
-            </div>
-          </MobileSlider>
         </div>
       </section>
 

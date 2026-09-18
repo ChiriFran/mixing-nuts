@@ -447,6 +447,16 @@
   background-color: var(--color-white);
 }
 
+.benefits .section-title {
+  margin-bottom: var(--space-2xl);
+}
+
+@media (min-width: 768px) {
+  .mobile-slider__track.benefits-grid .mobile-slider__slide:has(.benefit--only-mobile) {
+    display: none;
+  }
+}
+
 .benefits__grid {
   display: grid;
   grid-template-columns: 1fr;
