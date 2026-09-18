@@ -62,11 +62,11 @@
 }
 
 .hero__title {
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
   font-size: var(--text-3xl);
-  font-weight: 700;
-  letter-spacing: -0.05em;
-  line-height: 1.1;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.15;
   margin-bottom: var(--space-lg);
 }
 
@@ -86,9 +86,9 @@
   color: var(--color-primary);
   position: relative;
   display: block;
-  font-weight: 700;
-  letter-spacing: -0.05em;
-  line-height: 1.1;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.15;
 }
 
 .hero__title-highlight::after {

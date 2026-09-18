@@ -186,23 +186,6 @@ const Home = () => {
       {/* Featured Products */}
       <FeaturedProducts />
 
-      {/* Mixes Section */}
-      <section className="mixes section" ref={addSectionRef}>
-        <div className="container">
-          <h2 className="section-title">Mixes de frutos secos para cada momento</h2>
-          <p className="section-subtitle">Comprá Mix Premium, Mix Completo, Mix Intermedio y otras combinaciones online.</p>
-          {loading ? (
-            <Spinner />
-          ) : (
-            <div className="mixes__grid">
-              {mixProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
       {/* Editorial 2 */}
       <section className="editorial section" ref={addSectionRef}>
         <div className="container">
@@ -223,6 +206,23 @@ const Home = () => {
               <img src="/images/back-1.png" alt="Frutos secos seleccionados" title="Nuestra selección de frutos secos premium" className="editorial__img" />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Mixes Section */}
+      <section className="mixes section" ref={addSectionRef}>
+        <div className="container">
+          <h2 className="section-title">Mixes de frutos secos para cada momento</h2>
+          <p className="section-subtitle">Comprá Mix Premium, Mix Completo, Mix Intermedio y otras combinaciones online.</p>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <div className="mixes__grid">
+              {mixProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

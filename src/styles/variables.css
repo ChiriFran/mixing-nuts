@@ -29,7 +29,8 @@
   --color-warning: #ff9900;
 
   /* Typography */
-  --font-heading: 'Spire', 'Georgia', serif;
+  --font-heading: 'Titan One', 'Spire', 'Georgia', serif;
+  --font-display: 'Titan One', 'Spire', 'Georgia', serif;
   --font-body: 'Quicksand', 'Segoe UI', sans-serif;
 
   --text-xs: 0.75rem;

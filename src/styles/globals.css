@@ -9,6 +9,15 @@
   font-style: normal;
 }
 
+/* Titan One - self-hosted display font */
+@font-face {
+  font-family: 'Titan One';
+  src: url('/fonts/TitanOne-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -34,6 +43,16 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 400;
   line-height: 1.2;
   color: var(--color-text);
+}
+
+/* Titan One only has weight 400: normalize headings to avoid synthetic bold */
+h1, h2, h3, h4, h5, h6,
+[class*="__title"],
+[class$="-title"],
+[class*=" section-title"],
+[class^="section-title"] {
+  font-weight: 400 !important;
+  letter-spacing: normal !important;
 }
 
 a {
