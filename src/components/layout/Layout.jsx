@@ -1,6 +1,7 @@
 import Header from './Header';
 import Footer from './Footer';
 import Toast from '../ui/Toast';
+import WhatsAppButton from '../ui/WhatsAppButton';
 import './Layout.css';
 
 const Layout = ({ children }) => {
@@ -12,6 +13,7 @@ const Layout = ({ children }) => {
       </main>
       <Footer />
       <Toast />
+      <WhatsAppButton />
     </div>
   );
 };
