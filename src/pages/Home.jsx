@@ -5,6 +5,7 @@ import { getAllCategories } from '../services/categories';
 import ProductCard from '../components/products/ProductCard';
 import FeaturedProducts from '../components/products/FeaturedProducts';
 import MobileSlider from '../components/ui/MobileSlider';
+import ContactCta from '../components/sections/ContactCta';
 import Spinner from '../components/ui/Spinner';
 import './Home.css';
 
@@ -192,12 +193,11 @@ const Home = () => {
           <div className="editorial__grid">
             <div className="editorial__content">
               <span className="editorial__tag">Calidad garantizada</span>
-              <h2 className="editorial__title">Calidad en frutos secos y snacks saludables</h2>
+              <h2 className="editorial__title">Elegimos antes de ofrecer</h2>
               <p className="editorial__text">
-                Cada producto que llega a tus manos fue cuidadosamente seleccionado.
-                Trabajamos con proveedores de confianza para ofrecer frutos secos,
-                deshidratados y mixes frescos, sabrosos y prácticos.
-              </p>
+                Cada producto que incorporamos a Mixing Nuts pasa por un proceso de seleccion. Buscamos trabajar con productosque cunmplan con lo que queremos ofrecer: buena calidad, buen sabor.
+                consultanos por lista mayorista para ofrecer frutos secos, deshidratados y mixes.
+                </p>
               <Link to="/productos" className="btn btn-outline" title="Explorar catálogo de productos">
                 Explorar productos
               </Link>
@@ -226,26 +226,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* CTA Final */}
-      <section className="cta-final section" ref={addSectionRef}>
-        <div className="cta-final__wave">
-          <svg viewBox="0 0 1440 200" preserveAspectRatio="none">
-            <path d="M0,120 C120,20 240,220 360,120 C480,20 600,220 720,120 C840,20 960,220 1080,120 C1200,20 1320,220 1440,120 L1440,0 L0,0Z" fill="var(--color-primary-light)" opacity="0.5"/>
-            <path d="M0,100 C120,0 240,200 360,100 C480,0 600,200 720,100 C840,0 960,200 1080,100 C1200,0 1320,200 1440,100 L1440,0 L0,0Z" fill="currentColor"/>
-          </svg>
-        </div>
-        <div className="container">
-          <div className="cta-final__content">
-            <h2 className="cta-final__title">Comprá frutos secos online en Buenos Aires</h2>
-            <p className="cta-final__text">
-              Explorá el catálogo de Mixing Nuts y encontrá el mix o producto natural ideal para vos.
-            </p>
-            <Link to="/productos" className="btn btn-primary btn-lg" title="Ver catálogo completo">
-              Ver catálogo completo
-            </Link>
-          </div>
-        </div>
-      </section>
+      <ContactCta ref={addSectionRef} waveColor="var(--color-background)" />
 
       {/* Testimonials */}
       <section className="testimonials section" ref={addSectionRef}>

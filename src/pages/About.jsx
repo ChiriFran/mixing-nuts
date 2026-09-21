@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
-import { useEffect, useRef } from 'react';
-import './About.css';
+import { useEffect, useRef } from "react";
+import ContactCta from "../components/sections/ContactCta";
+import "./About.css";
 
 const About = () => {
   const imageBgRef = useRef(null);
@@ -11,21 +11,23 @@ const About = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
+            entry.target.classList.add("is-visible");
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
-    const elements = [imageBgRef.current, ...sectionsRef.current].filter(Boolean);
+    const elements = [imageBgRef.current, ...sectionsRef.current].filter(
+      Boolean,
+    );
     const frameId = requestAnimationFrame(() => {
       elements.forEach((element) => {
         observer.observe(element);
 
         const { top, bottom } = element.getBoundingClientRect();
         if (top < window.innerHeight && bottom > 0) {
-          element.classList.add('is-visible');
+          element.classList.add("is-visible");
         }
       });
     });
@@ -50,8 +52,10 @@ const About = () => {
             <span className="about__tag">Nuestra historia</span>
             <h1 className="about__title">Somos Mixing Nuts</h1>
             <p className="about__subtitle">
-              Una marca dedicada a ofrecer los mejores frutos secos y mixes,
-              seleccionados con dedicación y pasión por lo natural.
+              Nos gustan las cosas simples: buenos productos, variedad y precios
+              que tengan sentido. Asi nacio Mixing Nuts, con la idea de reunir
+              en un mismo lugar opciones para quienes disfrutan de una
+              alimentacion consciente
             </p>
           </div>
         </div>
@@ -61,15 +65,16 @@ const About = () => {
         <div className="container">
           <div className="about__grid">
             <div className="about__text">
-              <h2 className="about__section-title">Nuestra misión</h2>
+              <h2 className="about__section-title">Nuestra forma de hacerlo</h2>
               <p>
-                En Mixing Nuts creemos que los mejores snacks son los que la naturaleza
-                nos ofrece. Por eso seleccionamos cada fruto seco, cada mix y cada
-                producto con el estándar más alto de calidad.
+                Elegimos lo que queremos ofrecer , buscamos, probamos,
+                comparamos y elegimos. Contruimos nuestro catalogo pensando en
+                que vale la pena tener, no simplemente en tener mas productos.
               </p>
               <p>
                 Trabajamos con proveedores de confianza para garantizar que cada
-                producto que llega a tus manos sea fresco, nutritivo y delicioso.
+                producto que llega a tus manos sea fresco, nutritivo y
+                delicioso.
               </p>
             </div>
             <div className="about__image">
@@ -87,18 +92,31 @@ const About = () => {
           <div className="about__values-grid">
             <div className="about__value">
               <div className="about__value-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 </svg>
               </div>
               <h3>Natural</h3>
-              <p>Productos sin conservantes artificiales ni aditivos innecesarios.</p>
+              <p>
+                Productos sin conservantes artificiales ni aditivos
+                innecesarios.
+              </p>
             </div>
             <div className="about__value">
               <div className="about__value-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-                  <polyline points="22 4 12 14.01 9 11.01"/>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                >
+                  <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
                 </svg>
               </div>
               <h3>Calidad</h3>
@@ -106,20 +124,32 @@ const About = () => {
             </div>
             <div className="about__value">
               <div className="about__value-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
-                  <circle cx="9" cy="7" r="4"/>
-                  <path d="M23 21v-2a4 4 0 00-3-3.87"/>
-                  <path d="M16 3.13a4 4 0 010 7.75"/>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                >
+                  <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 00-3-3.87" />
+                  <path d="M16 3.13a4 4 0 010 7.75" />
                 </svg>
               </div>
               <h3>Confianza</h3>
-              <p>Transparencia en cada paso, desde la selección hasta tu hogar.</p>
+              <p>
+                Transparencia en cada paso, desde la selección hasta tu hogar.
+              </p>
             </div>
             <div className="about__value">
               <div className="about__value-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                >
+                  <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
                 </svg>
               </div>
               <h3>Pasión</h3>
@@ -129,23 +159,7 @@ const About = () => {
         </div>
       </section>
 
-      <section className="about__cta section" ref={addSectionRef}>
-        <div className="about__cta-wave">
-          <svg viewBox="0 0 1440 200" preserveAspectRatio="none">
-            <path d="M0,120 C120,20 240,220 360,120 C480,20 600,220 720,120 C840,20 960,220 1080,120 C1200,20 1320,220 1440,120 L1440,0 L0,0Z" fill="var(--color-background-soft)" opacity="0.5"/>
-            <path d="M0,100 C120,0 240,200 360,100 C480,0 600,200 720,100 C840,0 960,200 1080,100 C1200,0 1320,200 1440,100 L1440,0 L0,0Z" fill="currentColor"/>
-          </svg>
-        </div>
-        <div className="container">
-          <div className="about__cta-content">
-            <h2>¿Querés conocernos mejor?</h2>
-            <p>Visitá nuestro catálogo y descubrí todos los productos que tenemos para vos.</p>
-            <Link to="/productos" className="btn btn-primary btn-lg" title="Ver productos">
-              Ver productos
-            </Link>
-          </div>
-        </div>
-      </section>
+      <ContactCta ref={addSectionRef} />
     </div>
   );
 };

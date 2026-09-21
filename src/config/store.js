@@ -3,7 +3,7 @@ export const storeConfig = {
   tagline: 'Frutos secos y mixes seleccionados',
   whatsapp: '5491138585573',
   email: 'info@mixingnuts.com.ar',
-  instagram: 'https://instagram.com/mixingnuts',
+  instagram: 'https://instagram.com/mixing.nuts',
   address: '',
   currency: 'ARS',
   locale: 'es-AR',
