@@ -4,7 +4,9 @@ import * as XLSX from 'xlsx';
 import { getAllOrders, updateOrderStatus, restoreStock } from '../services/orders';
 import { auth } from '../services/firebase';
 import { formatPrice } from '../utils/formatPrice';
+import { normalizeWhatsAppPhone } from '../utils/whatsapp';
 import AdminProducts from './AdminProducts';
+import AdminClients from './AdminClients';
 import './Admin.css';
 
 const STATUS_LABELS = {
@@ -21,19 +23,6 @@ const STATUS_COLORS = {
   enviada: 'admin__status--enviada',
   entregada: 'admin__status--entregada',
   cancelada: 'admin__status--cancelada',
-};
-
-const normalizeWhatsAppPhone = (phone) => {
-  let digits = String(phone || '').replace(/\D/g, '');
-
-  if (!digits) return '';
-  if (digits.startsWith('00')) digits = digits.slice(2);
-  if (digits.startsWith('54')) {
-    digits = digits.slice(2).replace(/^0/, '');
-    return `549${digits}`;
-  }
-
-  return `549${digits.replace(/^0/, '')}`;
 };
 
 const Admin = () => {
@@ -231,6 +220,14 @@ const Admin = () => {
         >
           <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M10 2L3 7v11h14V7l-7-5zM6 9a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm0 3a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1z"/></svg>
           Productos
+        </button>
+        <button
+          className={`admin__tab ${activeTab === 'clients' ? 'admin__tab--active' : ''}`}
+          type="button"
+          onClick={() => setActiveTab('clients')}
+        >
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/></svg>
+          Clientes
         </button>
       </div>
 
@@ -498,6 +495,8 @@ const Admin = () => {
       )}
 
       {activeTab === 'products' && <AdminProducts />}
+
+      {activeTab === 'clients' && <AdminClients />}
     </div>
   );
 };

@@ -1,6 +1,19 @@
 import { storeConfig } from '../config/store';
 import { formatPrice } from './formatPrice';
 
+export const normalizeWhatsAppPhone = (phone) => {
+  let digits = String(phone || '').replace(/\D/g, '');
+
+  if (!digits) return '';
+  if (digits.startsWith('00')) digits = digits.slice(2);
+  if (digits.startsWith('54')) {
+    digits = digits.slice(2).replace(/^0/, '');
+    return `549${digits}`;
+  }
+
+  return `549${digits.replace(/^0/, '')}`;
+};
+
 export const generateWhatsAppUrl = (order) => {
   const productsList = order.productos
     .map((p) => `• ${p.nombre} x${p.cantidad} — ${formatPrice(p.subtotal)}`)
