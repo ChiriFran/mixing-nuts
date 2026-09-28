@@ -3,8 +3,36 @@ import { useSearchParams } from 'react-router-dom';
 import { subscribeToProducts } from '../services/products';
 import { getAllCategories } from '../services/categories';
 import ProductCard from '../components/products/ProductCard';
+import HeroSlider from '../components/ui/HeroSlider';
 import Spinner from '../components/ui/Spinner';
 import './Products.css';
+
+const HERO_SLIDES = [
+  {
+    id: 'hero-1',
+    image: '/images/hero-slider/1.png',
+    alt: 'Selección de frutos secos, mixes, vinos y aceites premium',
+    title: 'Selección de frutos secos, mixes, vinos y aceites',
+    content: {
+      tag: 'Tienda online',
+      title: 'Frutos secos, mixes, vinos y aceites',
+      subtitle: 'Deshidratados y harinas también. Hacé tu pedido online y recibilo sin costo en zona norte.',
+      cta: { label: 'Ver mixes', to: '/productos?categoria=mixes' },
+    },
+  },
+  {
+    id: 'hero-2',
+    image: '/images/hero-slider/2.png',
+    alt: 'Armá tu combo de frutos secos o comprá por separado',
+    title: 'Armá tu combo o llevá todo por separado',
+    content: {
+      tag: 'A tu gusto',
+      title: 'Armá tu combo o llevá todo por separado',
+      subtitle: 'Elegís el mix que ya armamos nosotros o cada fruto seco, deshidratado, vino y aceite suelto. Como quieras.',
+      cta: { label: 'Explorar productos', to: '/productos' },
+    },
+  },
+];
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -33,8 +61,10 @@ const Products = () => {
   }, []);
 
   useEffect(() => {
-    if (contentRef.current) {
-      contentRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (activeCategory) {
+      contentRef.current?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0 });
     }
   }, [activeCategory]);
 
@@ -96,9 +126,7 @@ const Products = () => {
 
   return (
     <div className="products-page">
-      <div className="products-page__hero">
-        <img src="/images/banner-tienda.png" alt="Selección de frutos secos y mixes premium" className="products-page__hero-img" />
-      </div>
+      <HeroSlider slides={HERO_SLIDES} ariaLabel="Novedades de la tienda" />
 
       <div className="products-page__intro sr-only container">
         <h1 className="products-page__title">Nuestra selección</h1>

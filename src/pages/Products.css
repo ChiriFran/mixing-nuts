@@ -10,16 +10,8 @@
   border: 0;
 }
 
-.products-page__hero {
-  width: 100%;
-  overflow: hidden;
-}
-
-.products-page__hero-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
+.products-page__content {
+  scroll-margin-top: var(--header-height);
 }
 
 .products-page__intro {
