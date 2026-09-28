@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { getAllProducts, createProduct, updateProduct, deleteProduct, uploadProductImage } from '../services/products';
 import { getAllCategories } from '../services/categories';
 import { formatPrice } from '../utils/formatPrice';
+import { slugify } from '../utils/slugify';
 import './AdminProducts.css';
 
 const PLACEHOLDER_IMAGE = '/images/placeholder-product.svg';
@@ -22,15 +23,6 @@ const INITIAL_FORM = {
   destacado: false,
   imagen: '',
 };
-
-const slugify = (text) =>
-  text
-    .toString()
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)+/g, '');
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);

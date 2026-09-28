@@ -6,6 +6,7 @@ import ProductCard from '../components/products/ProductCard';
 import HeroSlider from '../components/ui/HeroSlider';
 import Spinner from '../components/ui/Spinner';
 import CategoryImage from '../components/ui/CategoryImage';
+import { slugify } from '../utils/slugify';
 import './Products.css';
 
 const HERO_SLIDES = [
@@ -57,7 +58,9 @@ const Products = () => {
       console.error('Error loading products:', error);
       setLoading(false);
     });
-    getAllCategories().then(setCategories);
+    getAllCategories()
+      .then(setCategories)
+      .catch((error) => console.error('Error loading categories:', error));
     return unsubscribe;
   }, []);
 
@@ -73,18 +76,18 @@ const Products = () => {
     let result = [...products];
 
     if (activeCategory) {
-      result = result.filter(
-        (p) => p.categoria.toLowerCase().replace(/\s+/g, '-') === activeCategory
-      );
+      const activeCat = categories.find((c) => c.slug === activeCategory);
+      const targets = new Set([activeCategory]);
+      if (activeCat?.nombre) targets.add(slugify(activeCat.nombre));
+      result = result.filter((p) => targets.has(slugify(p.categoria || '')));
     }
 
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      result = result.filter(
-        (p) =>
-          p.nombre.toLowerCase().includes(term) ||
-          p.descripcion.toLowerCase().includes(term) ||
-          p.categoria.toLowerCase().includes(term)
+      result = result.filter((p) =>
+        [p.nombre, p.descripcion, p.descripcionCorta, p.presentacion]
+          .filter(Boolean)
+          .some((field) => field.toLowerCase().includes(term))
       );
     }
 
@@ -96,33 +99,39 @@ const Products = () => {
         result.sort((a, b) => b.precio - a.precio);
         break;
       case 'name':
-        result.sort((a, b) => a.nombre.localeCompare(b.nombre));
+        result.sort((a, b) => (a.nombre || '').localeCompare(b.nombre || '', 'es'));
         break;
       case 'featured':
         result.sort((a, b) => (b.destacado ? 1 : 0) - (a.destacado ? 1 : 0));
         break;
       default:
-        result.sort((a, b) => a.orden - b.orden);
+        result.sort((a, b) => (a.orden ?? 0) - (b.orden ?? 0));
     }
 
     setFilteredProducts(result);
-  }, [products, activeCategory, searchTerm, sortBy]);
+  }, [products, categories, activeCategory, searchTerm, sortBy]);
+
+  const setCategory = (slug) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (slug) {
+        next.set('categoria', slug);
+      } else {
+        next.delete('categoria');
+      }
+      return next;
+    });
+    setFiltersOpen(false);
+  };
 
   const handleCategoryClick = (slug) => {
-    if (slug === activeCategory) {
-      searchParams.delete('categoria');
-    } else {
-      searchParams.set('categoria', slug);
-    }
-    setSearchParams(searchParams);
-    setFiltersOpen(false);
+    setCategory(slug === activeCategory ? null : slug);
   };
 
   const clearFilters = () => {
     setSearchTerm('');
     setSortBy('default');
-    searchParams.delete('categoria');
-    setSearchParams(searchParams);
+    setCategory(null);
   };
 
   return (
@@ -194,7 +203,7 @@ const Products = () => {
             <div className="products-page__categories">
               <button
                 className={`products-page__category-btn products-page__category-btn--all ${!activeCategory ? 'products-page__category-btn--active' : ''}`}
-                onClick={() => { searchParams.delete('categoria'); setSearchParams(searchParams); }}
+                onClick={() => setCategory(null)}
               >
                 Todos
               </button>
