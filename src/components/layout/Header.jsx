@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { getAllCategories } from '../../services/categories';
 import CartIcon from '../cart/CartIcon';
+import CategoryImage from '../ui/CategoryImage';
 import './Header.css';
 
 const Header = () => {
@@ -41,6 +42,8 @@ const Header = () => {
   }, [menuOpen]);
 
   const isActiveLink = (to) => location.pathname === to;
+
+  const activeCategory = new URLSearchParams(location.search).get('categoria') || '';
 
   const openDropdown = () => {
     if (closeTimerRef.current) {
@@ -177,20 +180,30 @@ const Header = () => {
               </button>
             </div>
             {productsOpen && (
-              <div className="header__mobile-subnav">
-                <Link to="/productos" className="header__mobile-subnav-link" onClick={closeMenu}>
-                  Todos los productos
+              <div className="header__mobile-cats">
+                <Link
+                  to="/productos"
+                  className={`header__mobile-cats-all ${!activeCategory ? 'header__mobile-cats-all--active' : ''}`}
+                  onClick={closeMenu}
+                >
+                  Todos
                 </Link>
-                {categories.map((cat) => (
-                  <Link
-                    key={cat.id}
-                    to={`/productos?categoria=${cat.slug}`}
-                    className="header__mobile-subnav-link"
-                    onClick={closeMenu}
-                  >
-                    {cat.nombre}
-                  </Link>
-                ))}
+                <div className="header__mobile-cats-grid">
+                  {categories.map((cat) => (
+                    <Link
+                      key={cat.id}
+                      to={`/productos?categoria=${cat.slug}`}
+                      className={`header__mobile-cat ${activeCategory === cat.slug ? 'header__mobile-cat--active' : ''}`}
+                      onClick={closeMenu}
+                      title={`Categoría ${cat.nombre}`}
+                    >
+                      <span className="header__mobile-cat-avatar">
+                        <CategoryImage category={cat} />
+                      </span>
+                      <span className="header__mobile-cat-name">{cat.nombre}</span>
+                    </Link>
+                  ))}
+                </div>
               </div>
             )}
           </div>

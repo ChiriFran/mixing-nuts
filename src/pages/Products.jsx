@@ -5,6 +5,7 @@ import { getAllCategories } from '../services/categories';
 import ProductCard from '../components/products/ProductCard';
 import HeroSlider from '../components/ui/HeroSlider';
 import Spinner from '../components/ui/Spinner';
+import CategoryImage from '../components/ui/CategoryImage';
 import './Products.css';
 
 const HERO_SLIDES = [
@@ -205,12 +206,7 @@ const Products = () => {
                   title={`Categoría ${cat.nombre}`}
                 >
                   <span className="products-page__category-avatar">
-                    <img
-                      src={cat.imagen}
-                      alt={cat.nombre}
-                      loading="lazy"
-                      onError={(e) => { if (e.target.src !== '/favicon.svg') e.target.src = '/favicon.svg'; }}
-                    />
+                    <CategoryImage category={cat} />
                   </span>
                   <span className="products-page__category-name">{cat.nombre}</span>
                 </button>

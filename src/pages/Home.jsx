@@ -7,6 +7,7 @@ import FeaturedProducts from '../components/products/FeaturedProducts';
 import MobileSlider from '../components/ui/MobileSlider';
 import ContactCta from '../components/sections/ContactCta';
 import Spinner from '../components/ui/Spinner';
+import CategoryImage from '../components/ui/CategoryImage';
 import './Home.css';
 
 const HERO_GIF = '/images/hero-animated.gif';
@@ -166,7 +167,7 @@ const Home = () => {
                 className="category-circle"
               >
                 <div className="category-circle__image">
-                  <img src={cat.imagen} alt={cat.nombre} title={`Categoría ${cat.nombre} - Frutos secos`} />
+                  <CategoryImage category={cat} title={`Categoría ${cat.nombre} - Frutos secos`} />
                 </div>
                 <span className="category-circle__name">{cat.nombre}</span>
               </Link>
