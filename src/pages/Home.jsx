@@ -70,7 +70,7 @@ const Home = () => {
           <div className="hero__visual">
             <div className="hero__image-wrapper">
               <div className="hero__blob"></div>
-              <img src="/images/hero.png" alt="Frutos secos y mixes" title="Frutos secos y mixes Mixing Nuts Buenos Aires" className="hero__image" />
+              <img src="/images/hero-animated.gif" alt="Frutos secos y mixes" title="Frutos secos y mixes Mixing Nuts Buenos Aires" className="hero__image" />
             </div>
           </div>
           <div className="hero__cta">
