@@ -372,12 +372,7 @@
 /* Editorial 2 - snack showcase */
 .editorial--snack {
   position: relative;
-  background: linear-gradient(180deg, var(--color-white) 0%, var(--color-background-soft) 100%);
   overflow: hidden;
-}
-
-.editorial--snack--alt {
-  background: linear-gradient(180deg, var(--color-background-soft) 0%, var(--color-white) 100%);
 }
 
 .editorial--snack .editorial__grid {
