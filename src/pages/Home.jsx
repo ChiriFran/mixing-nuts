@@ -162,11 +162,29 @@ const Home = () => {
       </section>
 
       {/* Editorial 1 */}
-      <section className="editorial section" ref={addSectionRef}>
+      <section className="editorial editorial--snack editorial--snack--alt section" ref={addSectionRef}>
         <div className="container">
           <div className="editorial__grid editorial__grid--reverse">
-            <div className="editorial__image">
-              <img src="/images/back-1.png" alt="Frutos secos seleccionados" title="Nuestra selección de frutos secos premium" className="editorial__img" />
+            <div className="editorial__visual">
+              <div className="editorial__glow" aria-hidden="true"></div>
+              <div className="editorial__frame">
+                <img
+                  src="/images/pausa-saludable.jpeg"
+                  alt="Frutos secos seleccionados"
+                  title="Nuestra selección de frutos secos premium"
+                  className="editorial__img"
+                />
+                <span className="editorial__badge">
+                  <span className="editorial__list-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="m5 13 4 4L19 7" />
+                    </svg>
+                  </span>
+                  Tu pausa saludable
+                </span>
+              </div>
+              <span className="editorial__chip editorial__chip--top" aria-hidden="true">Buenos precios</span>
+              <span className="editorial__chip editorial__chip--bottom" aria-hidden="true">Entrega rápida</span>
             </div>
             <div className="editorial__content">
               <span className="editorial__tag">¿Quiénes somos?</span>
@@ -176,6 +194,32 @@ const Home = () => {
                 Seleccionamos productos de calidad y variedad para que encuentres eso que buscas,
                 a buenos precios y con la comodidad de recibir tu pedido rápidamente.
               </p>
+              <ul className="editorial__list">
+                <li className="editorial__list-item">
+                  <span className="editorial__list-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="m5 13 4 4L19 7" />
+                    </svg>
+                  </span>
+                  Calidad y variedad en cada pedido
+                </li>
+                <li className="editorial__list-item">
+                  <span className="editorial__list-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="m5 13 4 4L19 7" />
+                    </svg>
+                  </span>
+                  Pedido simple, entrega sin vueltas
+                </li>
+                <li className="editorial__list-item">
+                  <span className="editorial__list-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="m5 13 4 4L19 7" />
+                    </svg>
+                  </span>
+                  envíos a todo el país
+                </li>
+              </ul>
               <Link to="/nosotros" className="btn btn-outline" title="Conocé nuestra historia">
                 Conocé más
               </Link>
@@ -188,22 +232,69 @@ const Home = () => {
       <FeaturedProducts />
 
       {/* Editorial 2 */}
-      <section className="editorial section" ref={addSectionRef}>
+      <section className="editorial editorial--snack section" ref={addSectionRef}>
         <div className="container">
           <div className="editorial__grid">
             <div className="editorial__content">
               <span className="editorial__tag">Calidad garantizada</span>
               <h2 className="editorial__title">Elegimos antes de ofrecer</h2>
               <p className="editorial__text">
-                Cada producto que incorporamos a Mixing Nuts pasa por un proceso de seleccion. Buscamos trabajar con productosque cunmplan con lo que queremos ofrecer: buena calidad, buen sabor.
-                consultanos por lista mayorista para ofrecer frutos secos, deshidratados y mixes.
-                </p>
+                Cada producto que incorporamos a Mixing Nuts pasa por un proceso de selección.
+                Buscamos trabajar con proveedores que cumplan con lo que queremos ofrecer: buena calidad,
+                buen sabor y origen claro.
+              </p>
+              <ul className="editorial__list">
+                <li className="editorial__list-item">
+                  <span className="editorial__list-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="m5 13 4 4L19 7" />
+                    </svg>
+                  </span>
+                  Selección producto por producto
+                </li>
+                <li className="editorial__list-item">
+                  <span className="editorial__list-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="m5 13 4 4L19 7" />
+                    </svg>
+                  </span>
+                  Frutos secos, deshidratados y mixes
+                </li>
+                <li className="editorial__list-item">
+                  <span className="editorial__list-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="m5 13 4 4L19 7" />
+                    </svg>
+                  </span>
+                  Consultanos por lista mayorista
+                </li>
+              </ul>
               <Link to="/productos" className="btn btn-outline" title="Explorar catálogo de productos">
                 Explorar productos
               </Link>
             </div>
-            <div className="editorial__image">
-              <img src="/images/back-1.png" alt="Frutos secos seleccionados" title="Nuestra selección de frutos secos premium" className="editorial__img" />
+            <div className="editorial__visual">
+              <div className="editorial__glow" aria-hidden="true"></div>
+              <div className="editorial__frame">
+                <video
+                  className="editorial__video"
+                  src="/images/merienda-gif.mp4"
+                  poster="/images/back-1.png"
+                  title="Armando tu merienda con frutos secos"
+                  aria-label="Armando tu merienda con frutos secos"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                />
+                <span className="editorial__badge">
+                  <span className="editorial__badge-dot" aria-hidden="true"></span>
+                  Merienda en minutos
+                </span>
+              </div>
+              <span className="editorial__chip editorial__chip--top" aria-hidden="true">100% natural</span>
+              <span className="editorial__chip editorial__chip--bottom" aria-hidden="true">Envío sin costo</span>
             </div>
           </div>
         </div>
