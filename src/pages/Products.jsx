@@ -22,7 +22,7 @@ const HERO_SLIDES = [
   },
   {
     id: 'hero-2',
-    image: '/images/hero-slider/2.png',
+    image: '/images/hero-slider/2.jpeg',
     alt: 'Armá tu combo de frutos secos o comprá los productos por separado',
     title: 'Armá tu combo o comprá por separado',
     content: {
