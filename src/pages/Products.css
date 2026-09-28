@@ -111,6 +111,34 @@
   outline: none;
 }
 
+.products-page__search-input::-webkit-search-cancel-button,
+.products-page__search-input::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.products-page__search-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: var(--color-border);
+  color: var(--color-text-soft);
+  font-size: 0.7rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.products-page__search-clear:hover {
+  background-color: var(--color-background-muted);
+  color: var(--color-text);
+}
+
 .products-page__sort {
   padding: 0.5rem 1rem;
   border: 1px solid var(--color-border);

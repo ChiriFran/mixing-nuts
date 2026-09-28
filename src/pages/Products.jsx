@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { subscribeToProducts } from '../services/products';
 import { getAllCategories } from '../services/categories';
@@ -6,7 +6,12 @@ import ProductCard from '../components/products/ProductCard';
 import HeroSlider from '../components/ui/HeroSlider';
 import Spinner from '../components/ui/Spinner';
 import CategoryImage from '../components/ui/CategoryImage';
-import { slugify } from '../utils/slugify';
+import {
+  findCategoryByTokens,
+  parseSearchTokens,
+  productBelongsToCategory,
+  productMatchesTokens,
+} from '../utils/searchProducts';
 import './Products.css';
 
 const HERO_SLIDES = [
@@ -45,9 +50,21 @@ const Products = () => {
   const [sortBy, setSortBy] = useState('default');
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadingCategories, setLoadingCategories] = useState(true);
   const contentRef = useRef(null);
 
   const activeCategory = searchParams.get('categoria') || '';
+
+  const searchTokens = useMemo(() => parseSearchTokens(searchTerm), [searchTerm]);
+  const searchedCategory = useMemo(
+    () => findCategoryByTokens(categories, searchTokens),
+    [categories, searchTokens]
+  );
+  const urlCategory = useMemo(
+    () => categories.find((category) => category.slug === activeCategory) || null,
+    [categories, activeCategory]
+  );
+  const activeCategoryData = searchedCategory || urlCategory;
 
   useEffect(() => {
     setLoading(true);
@@ -60,7 +77,8 @@ const Products = () => {
     });
     getAllCategories()
       .then(setCategories)
-      .catch((error) => console.error('Error loading categories:', error));
+      .catch((error) => console.error('Error loading categories:', error))
+      .finally(() => setLoadingCategories(false));
     return unsubscribe;
   }, []);
 
@@ -75,20 +93,12 @@ const Products = () => {
   useEffect(() => {
     let result = [...products];
 
-    if (activeCategory) {
-      const activeCat = categories.find((c) => c.slug === activeCategory);
-      const targets = new Set([activeCategory]);
-      if (activeCat?.nombre) targets.add(slugify(activeCat.nombre));
-      result = result.filter((p) => targets.has(slugify(p.categoria || '')));
+    if (activeCategoryData) {
+      result = result.filter((product) => productBelongsToCategory(product, activeCategoryData));
     }
 
-    if (searchTerm) {
-      const term = searchTerm.toLowerCase();
-      result = result.filter((p) =>
-        [p.nombre, p.descripcion, p.descripcionCorta, p.presentacion]
-          .filter(Boolean)
-          .some((field) => field.toLowerCase().includes(term))
-      );
+    if (searchTokens.length > 0) {
+      result = result.filter((product) => productMatchesTokens(product, searchTokens));
     }
 
     switch (sortBy) {
@@ -109,9 +119,10 @@ const Products = () => {
     }
 
     setFilteredProducts(result);
-  }, [products, categories, activeCategory, searchTerm, sortBy]);
+  }, [products, activeCategoryData, searchTokens, sortBy]);
 
   const setCategory = (slug) => {
+    setSearchTerm('');
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
       if (slug) {
@@ -152,12 +163,25 @@ const Products = () => {
                 <line x1="21" y1="21" x2="16.65" y2="16.65"/>
               </svg>
               <input
-                type="text"
-                placeholder="Buscar productos..."
+                type="search"
+                placeholder="Buscar por nombre o categoría..."
+                aria-label="Buscar productos por nombre o categoría"
+                enterKeyHint="search"
+                autoComplete="off"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="products-page__search-input"
               />
+              {searchTerm && (
+                <button
+                  type="button"
+                  className="products-page__search-clear"
+                  onClick={() => setSearchTerm('')}
+                  aria-label="Limpiar búsqueda"
+                >
+                  ✕
+                </button>
+              )}
             </div>
 
             <button
@@ -187,7 +211,8 @@ const Products = () => {
             </select>
 
             <span className="products-page__count">
-              {filteredProducts.length} productos
+              {filteredProducts.length} {filteredProducts.length === 1 ? 'producto' : 'productos'}
+              {activeCategoryData && ` en ${activeCategoryData.nombre}`}
             </span>
           </div>
         </div>
@@ -202,7 +227,7 @@ const Products = () => {
             </div>
             <div className="products-page__categories">
               <button
-                className={`products-page__category-btn products-page__category-btn--all ${!activeCategory ? 'products-page__category-btn--active' : ''}`}
+                className={`products-page__category-btn products-page__category-btn--all ${!activeCategoryData ? 'products-page__category-btn--active' : ''}`}
                 onClick={() => setCategory(null)}
               >
                 Todos
@@ -210,7 +235,7 @@ const Products = () => {
               {categories.map((cat) => (
                 <button
                   key={cat.id}
-                  className={`products-page__category-btn ${activeCategory === cat.slug ? 'products-page__category-btn--active' : ''}`}
+                  className={`products-page__category-btn ${activeCategoryData?.slug === cat.slug ? 'products-page__category-btn--active' : ''}`}
                   onClick={() => handleCategoryClick(cat.slug)}
                   title={`Categoría ${cat.nombre}`}
                 >
@@ -229,7 +254,7 @@ const Products = () => {
           </aside>
 
           <div className="products-page__grid">
-            {loading ? (
+            {loading || loadingCategories ? (
               <div className="products-page__empty">
                 <Spinner />
                 <p>Cargando productos...</p>
@@ -240,7 +265,11 @@ const Products = () => {
               ))
             ) : (
               <div className="products-page__empty">
-                <p>No se encontraron productos con los filtros seleccionados.</p>
+                <p>
+                  {searchTokens.length > 0
+                    ? `No se encontraron productos para "${searchTerm.trim()}".`
+                    : 'No se encontraron productos con los filtros seleccionados.'}
+                </p>
                 <button className="btn btn-outline" onClick={clearFilters}>
                   Ver todos
                 </button>
