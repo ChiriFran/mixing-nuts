@@ -192,7 +192,7 @@ const Products = () => {
             </div>
             <div className="products-page__categories">
               <button
-                className={`products-page__category-btn ${!activeCategory ? 'products-page__category-btn--active' : ''}`}
+                className={`products-page__category-btn products-page__category-btn--all ${!activeCategory ? 'products-page__category-btn--active' : ''}`}
                 onClick={() => { searchParams.delete('categoria'); setSearchParams(searchParams); }}
               >
                 Todos
@@ -202,8 +202,17 @@ const Products = () => {
                   key={cat.id}
                   className={`products-page__category-btn ${activeCategory === cat.slug ? 'products-page__category-btn--active' : ''}`}
                   onClick={() => handleCategoryClick(cat.slug)}
+                  title={`Categoría ${cat.nombre}`}
                 >
-                  {cat.nombre}
+                  <span className="products-page__category-avatar">
+                    <img
+                      src={cat.imagen}
+                      alt={cat.nombre}
+                      loading="lazy"
+                      onError={(e) => { if (e.target.src !== '/favicon.svg') e.target.src = '/favicon.svg'; }}
+                    />
+                  </span>
+                  <span className="products-page__category-name">{cat.nombre}</span>
                 </button>
               ))}
             </div>
