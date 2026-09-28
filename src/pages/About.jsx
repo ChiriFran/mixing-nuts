@@ -7,7 +7,19 @@ const About = () => {
   const sectionsRef = useRef([]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    const imageObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            imageObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.6, rootMargin: "0px 0px -20% 0px" },
+    );
+
+    const sectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
@@ -18,23 +30,26 @@ const About = () => {
       { threshold: 0.1 },
     );
 
-    const elements = [imageBgRef.current, ...sectionsRef.current].filter(
-      Boolean,
-    );
+    const sections = sectionsRef.current.filter(Boolean);
     const frameId = requestAnimationFrame(() => {
-      elements.forEach((element) => {
-        observer.observe(element);
+      sections.forEach((section) => {
+        sectionObserver.observe(section);
 
-        const { top, bottom } = element.getBoundingClientRect();
+        const { top, bottom } = section.getBoundingClientRect();
         if (top < window.innerHeight && bottom > 0) {
-          element.classList.add("is-visible");
+          section.classList.add("is-visible");
         }
       });
+
+      if (imageBgRef.current) {
+        imageObserver.observe(imageBgRef.current);
+      }
     });
 
     return () => {
       cancelAnimationFrame(frameId);
-      observer.disconnect();
+      imageObserver.disconnect();
+      sectionObserver.disconnect();
     };
   }, []);
 
@@ -48,16 +63,7 @@ const About = () => {
     <div className="about">
       <section className="about__hero section" ref={addSectionRef}>
         <div className="container">
-          <div className="about__hero-content">
-            <span className="about__tag">Nuestra historia</span>
-            <h1 className="about__title">Somos Mixing Nuts</h1>
-            <p className="about__subtitle">
-              Nos gustan las cosas simples: buenos productos, variedad y precios
-              que tengan sentido. Asi nacio Mixing Nuts, con la idea de reunir
-              en un mismo lugar opciones para quienes disfrutan de una
-              alimentacion consciente
-            </p>
-          </div>
+          <h1 className="about__hero-caption">Esto es lo que somos</h1>
         </div>
       </section>
 

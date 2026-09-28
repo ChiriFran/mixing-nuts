@@ -9,10 +9,17 @@ import ContactCta from '../components/sections/ContactCta';
 import Spinner from '../components/ui/Spinner';
 import './Home.css';
 
+const HERO_GIF = '/images/hero-animated.gif';
+const HERO_FALLBACK = '/images/hero-animated-fallback.png';
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
 const Home = () => {
   const [mixProducts, setMixProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [heroGifAvailable, setHeroGifAvailable] = useState(() => !prefersReducedMotion());
   const sectionsRef = useRef([]);
 
   useEffect(() => {
@@ -70,7 +77,14 @@ const Home = () => {
           <div className="hero__visual">
             <div className="hero__image-wrapper">
               <div className="hero__blob"></div>
-              <img src="/images/hero-animated.gif" alt="Frutos secos y mixes" title="Frutos secos y mixes Mixing Nuts Buenos Aires" className="hero__image" />
+              <img
+                src={heroGifAvailable ? HERO_GIF : HERO_FALLBACK}
+                alt="Frutos secos y mixes"
+                title="Frutos secos y mixes Mixing Nuts Buenos Aires"
+                className="hero__image"
+                decoding="async"
+                onError={() => setHeroGifAvailable(false)}
+              />
             </div>
           </div>
           <div className="hero__cta">
