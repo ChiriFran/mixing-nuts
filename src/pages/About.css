@@ -27,20 +27,6 @@
   }
 }
 
-.about__hero-caption {
-  font-family: var(--font-heading);
-  font-size: var(--text-3xl);
-  color: var(--color-primary);
-  margin: 0;
-  line-height: 1.15;
-}
-
-@media (min-width: 768px) {
-  .about__hero-caption {
-    font-size: var(--text-4xl);
-  }
-}
-
 .about .section-title {
   padding-bottom: 1rem;
 }

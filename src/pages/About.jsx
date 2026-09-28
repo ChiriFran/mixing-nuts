@@ -61,17 +61,13 @@ const About = () => {
 
   return (
     <div className="about">
-      <section className="about__hero section" ref={addSectionRef}>
-        <div className="container">
-          <h1 className="about__hero-caption">Esto es lo que somos</h1>
-        </div>
-      </section>
+      <section className="about__hero section" ref={addSectionRef} aria-hidden="true" />
 
       <section className="about__content section" ref={addSectionRef}>
         <div className="container">
           <div className="about__grid">
             <div className="about__text">
-              <h2 className="about__section-title">Nuestra forma de hacerlo</h2>
+              <h1 className="about__section-title">Nuestra forma de hacerlo</h1>
               <p>
                 Elegimos lo que queremos ofrecer , buscamos, probamos,
                 comparamos y elegimos. Contruimos nuestro catalogo pensando en
