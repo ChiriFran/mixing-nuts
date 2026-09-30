@@ -17,7 +17,7 @@ import './Products.css';
 const HERO_SLIDES = [
   {
     id: 'hero-1',
-    image: '/images/hero-slider/1.png',
+    image: '/images/hero-slider/1.jpeg',
     alt: 'Selección de frutos secos, mixes, vinos y aceites premium',
     title: 'Selección de frutos secos, mixes, vinos y aceites',
     content: {
