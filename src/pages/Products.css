@@ -262,7 +262,7 @@
   display: block;
   width: 64px;
   height: 64px;
-  border-radius: 50%;
+  border-radius: 20%;
   overflow: hidden;
   background-color: var(--color-background-soft);
   border: 2px solid var(--color-border-light);
