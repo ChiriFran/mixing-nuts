@@ -263,7 +263,7 @@
 .category-circle__image {
   width: 80px;
   height: 80px;
-  border-radius: 50%;
+  border-radius: 20%;
   overflow: hidden;
   transition: transform var(--transition-base), box-shadow var(--transition-base);
   background-color: var(--color-background-soft);
