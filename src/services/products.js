@@ -13,13 +13,17 @@ export const getAllProducts = async () => {
 
 export const subscribeToProducts = (onProducts, onError) =>
   onSnapshot(
-    collection(db, PRODUCTS_COLLECTION),
+    query(collection(db, PRODUCTS_COLLECTION), where('activo', '==', true)),
     (snapshot) => onProducts(snapshot.docs.map(mapProduct)),
     onError
   );
 
 export const getProductBySlug = async (slug) => {
-  const q = query(collection(db, PRODUCTS_COLLECTION), where('slug', '==', slug));
+  const q = query(
+    collection(db, PRODUCTS_COLLECTION),
+    where('slug', '==', slug),
+    where('activo', '==', true)
+  );
   const snapshot = await getDocs(q);
   if (snapshot.empty) return null;
   const doc = snapshot.docs[0];
@@ -27,7 +31,11 @@ export const getProductBySlug = async (slug) => {
 };
 
 export const subscribeToProductBySlug = (slug, onProduct, onError) => {
-  const productsQuery = query(collection(db, PRODUCTS_COLLECTION), where('slug', '==', slug));
+  const productsQuery = query(
+    collection(db, PRODUCTS_COLLECTION),
+    where('slug', '==', slug),
+    where('activo', '==', true)
+  );
   return onSnapshot(
     productsQuery,
     (snapshot) => onProduct(snapshot.empty ? null : mapProduct(snapshot.docs[0])),

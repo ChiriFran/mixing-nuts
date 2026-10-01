@@ -1,0 +1,32 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.uid == 'WB00Y17z2mYEGm6iofyAVX1Gh863';
+    }
+
+    match /productos/{productId} {
+      allow read: if isAdmin() || resource.data.activo == true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /categorias/{categoryId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /ordenes/{orderId} {
+      allow read: if isAdmin();
+      allow create, delete: if false;
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['estado'])
+        && request.resource.data.estado in ['pendiente', 'confirmada', 'enviada', 'entregada'];
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,46 +1,18 @@
-import { collection, getDocs, doc, getDoc, updateDoc, query, orderBy, runTransaction } from 'firebase/firestore';
-import { db } from './firebase';
+import { collection, getDocs, doc, updateDoc, query, orderBy } from 'firebase/firestore';
+import { auth, db } from './firebase';
 
 const ORDERS_COLLECTION = 'ordenes';
-const PRODUCTS_COLLECTION = 'productos';
 
 export const createOrder = async (order, cartItems) => {
-  const orderRef = doc(collection(db, ORDERS_COLLECTION));
-
-  const orderData = {
-    ...order,
-    id: orderRef.id,
-    estado: 'pendiente',
-    createdAt: new Date().toISOString(),
-  };
-
-  await runTransaction(db, async (transaction) => {
-    const productRefs = cartItems.map((item) => doc(db, PRODUCTS_COLLECTION, item.id));
-    const productSnapshots = await Promise.all(productRefs.map((productRef) => transaction.get(productRef)));
-
-    productSnapshots.forEach((productSnap, index) => {
-      const item = cartItems[index];
-      const stock = productSnap.exists() ? Number(productSnap.data().stock) || 0 : 0;
-      if (!productSnap.exists() || stock < item.cantidad) {
-        throw new Error(`STOCK_INSUFFICIENT:${item.nombre}`);
-      }
-    });
-
-    transaction.set(orderRef, orderData);
-    productSnapshots.forEach((productSnap, index) => {
-      const productRef = productRefs[index];
-      transaction.update(productRef, { stock: (Number(productSnap.data().stock) || 0) - cartItems[index].cantidad });
-    });
+  const response = await fetch('/api/orders', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ order, cartItems }),
   });
+  const result = await response.json();
 
-  return orderData;
-};
-
-export const getOrderById = async (id) => {
-  const docRef = doc(db, ORDERS_COLLECTION, id);
-  const docSnap = await getDoc(docRef);
-  if (!docSnap.exists()) return null;
-  return { id: docSnap.id, ...docSnap.data() };
+  if (!response.ok) throw new Error(result.error || 'No se pudo crear el pedido.');
+  return result.order;
 };
 
 export const getAllOrders = async () => {
@@ -55,19 +27,18 @@ export const updateOrderStatus = async (id, status) => {
 };
 
 export const restoreStock = async (order) => {
-  await runTransaction(db, async (transaction) => {
-    const productRefs = order.productos.map((item) => doc(db, PRODUCTS_COLLECTION, item.productId));
-    const productSnapshots = await Promise.all(productRefs.map((productRef) => transaction.get(productRef)));
+  const user = auth.currentUser;
+  if (!user) throw new Error('La sesión de administrador no está activa.');
 
-    productSnapshots.forEach((productSnap, index) => {
-      if (productSnap.exists()) {
-        const currentStock = Number(productSnap.data().stock) || 0;
-        transaction.update(productRefs[index], {
-          stock: currentStock + order.productos[index].cantidad,
-        });
-      }
-    });
-
-    transaction.update(doc(db, ORDERS_COLLECTION, order.id), { estado: 'cancelada' });
+  const response = await fetch('/api/cancel-order', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${await user.getIdToken()}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ orderId: order.id }),
   });
+  const result = await response.json();
+
+  if (!response.ok) throw new Error(result.error || 'No se pudo cancelar el pedido.');
 };

@@ -388,7 +388,7 @@ const Admin = () => {
                 <div className="admin__detail-section">
                   <h3>Estado</h3>
                   <div className="admin__status-buttons">
-                    {Object.entries(STATUS_LABELS).map(([key, label]) => (
+                    {Object.entries(STATUS_LABELS).filter(([key]) => key !== 'cancelada').map(([key, label]) => (
                       <button
                         key={key}
                         className={`btn btn-sm ${selectedOrder.estado === key ? 'btn-primary' : 'btn-outline'}`}
@@ -462,7 +462,7 @@ const Admin = () => {
                   <div className="admin__detail-section">
                     <h3>Estado</h3>
                     <div className="admin__status-buttons">
-                      {Object.entries(STATUS_LABELS).map(([key, label]) => (
+                      {Object.entries(STATUS_LABELS).filter(([key]) => key !== 'cancelada').map(([key, label]) => (
                         <button
                           key={key}
                           className={`btn btn-sm ${selectedOrder.estado === key ? 'btn-primary' : 'btn-outline'}`}

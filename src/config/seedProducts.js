@@ -1,17 +1,4 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
-
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+import { getAdminDb } from '../../server/firebaseAdmin.js';
 
 const products = [
   { id: 'almendras-1kg', nombre: 'Almendras', slug: 'almendras', descripcion: 'Almendras enteras de primera calidad, crudas y sin sal. Perfectas para snacks saludables, repostería y cocinar.', descripcionCorta: 'Almendras enteras crudas sin sal.', categoria: 'Frutos secos', imagen: '/images/products/almendras.png', precio: 23900, precioTransferencia: 25095, presentacion: '1 kg', ingredientes: ['Almendras'], stock: 50, destacado: true, activo: true, orden: 1 },
@@ -45,19 +32,19 @@ const categories = [
 ];
 
 async function seedProducts() {
-  const productsRef = collection(db, 'productos');
+  const productsRef = getAdminDb().collection('productos');
   for (const product of products) {
     const { id, ...productData } = product;
-    await setDoc(doc(productsRef, id), productData);
+    await productsRef.doc(id).set(productData);
     console.log(`✓ Producto subido: ${product.nombre}`);
   }
 }
 
 async function seedCategories() {
-  const categoriesRef = collection(db, 'categorias');
+  const categoriesRef = getAdminDb().collection('categorias');
   for (const category of categories) {
     const { id, ...categoryData } = category;
-    await setDoc(doc(categoriesRef, id), categoryData);
+    await categoriesRef.doc(id).set(categoryData);
     console.log(`✓ Categoría subida: ${category.nombre}`);
   }
 }
@@ -71,6 +58,7 @@ async function main() {
     console.log('\n✅ Seed completado exitosamente');
   } catch (error) {
     console.error('❌ Error durante el seed:', error);
+    process.exitCode = 1;
   }
 }
 
