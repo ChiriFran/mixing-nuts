@@ -18,10 +18,6 @@ export const createOrder = async (order, cartItems) => {
     }
     quantities.set(productId, (quantities.get(productId) || 0) + quantity);
   }
-  if (quantities.size > 8 || [...quantities.values()].some((quantity) => quantity > 100)) {
-    throw new Error('El pedido supera el límite permitido de productos.');
-  }
-
   const orderRef = doc(collection(db, ORDERS_COLLECTION));
   const productRefs = [...quantities.keys()].map((id) => doc(db, PRODUCTS_COLLECTION, id));
   let savedOrder;
