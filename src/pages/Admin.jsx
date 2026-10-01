@@ -387,17 +387,21 @@ const Admin = () => {
 
                 <div className="admin__detail-section">
                   <h3>Estado</h3>
-                  <div className="admin__status-buttons">
-                    {Object.entries(STATUS_LABELS).filter(([key]) => key !== 'cancelada').map(([key, label]) => (
-                      <button
-                        key={key}
-                        className={`btn btn-sm ${selectedOrder.estado === key ? 'btn-primary' : 'btn-outline'}`}
-                        onClick={() => handleStatusChange(selectedOrder.id, key)}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </div>
+                  {selectedOrder.estado === 'cancelada' ? (
+                    <p>Pedido cancelado. El estado es definitivo.</p>
+                  ) : (
+                    <div className="admin__status-buttons">
+                      {Object.entries(STATUS_LABELS).filter(([key]) => key !== 'cancelada').map(([key, label]) => (
+                        <button
+                          key={key}
+                          className={`btn btn-sm ${selectedOrder.estado === key ? 'btn-primary' : 'btn-outline'}`}
+                          onClick={() => handleStatusChange(selectedOrder.id, key)}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {['pendiente', 'confirmada'].includes(selectedOrder.estado) && (
@@ -461,17 +465,21 @@ const Admin = () => {
 
                   <div className="admin__detail-section">
                     <h3>Estado</h3>
-                    <div className="admin__status-buttons">
-                      {Object.entries(STATUS_LABELS).filter(([key]) => key !== 'cancelada').map(([key, label]) => (
-                        <button
-                          key={key}
-                          className={`btn btn-sm ${selectedOrder.estado === key ? 'btn-primary' : 'btn-outline'}`}
-                          onClick={() => handleStatusChange(selectedOrder.id, key)}
-                        >
-                          {label}
-                        </button>
-                      ))}
-                    </div>
+                    {selectedOrder.estado === 'cancelada' ? (
+                      <p>Pedido cancelado. El estado es definitivo.</p>
+                    ) : (
+                      <div className="admin__status-buttons">
+                        {Object.entries(STATUS_LABELS).filter(([key]) => key !== 'cancelada').map(([key, label]) => (
+                          <button
+                            key={key}
+                            className={`btn btn-sm ${selectedOrder.estado === key ? 'btn-primary' : 'btn-outline'}`}
+                            onClick={() => handleStatusChange(selectedOrder.id, key)}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   {selectedOrder.estado !== 'cancelada' && (

@@ -85,7 +85,14 @@ export const getAllOrders = async () => {
 
 export const updateOrderStatus = async (id, status) => {
   const docRef = doc(db, ORDERS_COLLECTION, id);
-  await updateDoc(docRef, { estado: status });
+  await runTransaction(db, async (transaction) => {
+    const orderSnapshot = await transaction.get(docRef);
+    if (!orderSnapshot.exists()) throw new Error('No se encontró el pedido.');
+    if (orderSnapshot.data().estado === 'cancelada') {
+      throw new Error('No se puede cambiar el estado de un pedido cancelado.');
+    }
+    transaction.update(docRef, { estado: status });
+  });
 };
 
 export const restoreStock = async (order) => {
