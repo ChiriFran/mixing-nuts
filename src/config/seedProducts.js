@@ -1,4 +1,4 @@
-import { getAdminDb } from '../../server/firebaseAdmin.js';
+import { getAdminDb } from '../../scripts/firebaseAdmin.js';
 
 const products = [
   { id: 'almendras-1kg', nombre: 'Almendras', slug: 'almendras', descripcion: 'Almendras enteras de primera calidad, crudas y sin sal. Perfectas para snacks saludables, repostería y cocinar.', descripcionCorta: 'Almendras enteras crudas sin sal.', categoria: 'Frutos secos', imagen: '/images/products/almendras.png', precio: 23900, precioTransferencia: 25095, presentacion: '1 kg', ingredientes: ['Almendras'], stock: 50, destacado: true, activo: true, orden: 1 },

@@ -400,7 +400,7 @@ const Admin = () => {
                   </div>
                 </div>
 
-                {selectedOrder.estado !== 'cancelada' && (
+                {['pendiente', 'confirmada'].includes(selectedOrder.estado) && (
                   <div className="admin__detail-section">
                     <button
                       className="btn btn-danger btn-sm"
