@@ -100,7 +100,7 @@ const AdminProducts = () => {
     });
     setImageFile(null);
     setImagePreview(product.imagen || '');
-    setUsePlaceholder(!product.imagen);
+    setUsePlaceholder(!product.imagen || product.imagen === PLACEHOLDER_IMAGE);
     setIngredientInput('');
     setDrawerOpen(true);
   };
@@ -159,7 +159,7 @@ const AdminProducts = () => {
       let imageUrl = formData.imagen;
 
       if (usePlaceholder) {
-        imageUrl = '';
+        imageUrl = PLACEHOLDER_IMAGE;
       } else if (imageFile) {
         const ext = imageFile.name.split('.').pop();
         const fileName = `${formData.slug || Date.now()}.${ext}`;
