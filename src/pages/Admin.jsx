@@ -88,9 +88,13 @@ const Admin = () => {
     return matchesName && matchesStatus && matchesTime;
   });
 
+  const saleOrders = orders.filter((order) =>
+    ['confirmada', 'enviada', 'entregada'].includes(order.estado)
+  );
+
   const topProduct = (() => {
     const counts = {};
-    orders.forEach((o) => {
+    saleOrders.forEach((o) => {
       (o.productos || []).forEach((p) => {
         const name = p.nombre || 'Producto';
         counts[name] = (counts[name] || 0) + (p.cantidad || 1);
@@ -105,7 +109,7 @@ const Admin = () => {
 
   const overviewStats = {
     total: orders.length,
-    totalRevenue: orders.reduce((sum, o) => sum + (o.total || 0), 0),
+    totalRevenue: saleOrders.reduce((sum, o) => sum + (o.total || 0), 0),
     pendientes: orders.filter((o) => o.estado === 'pendiente').length,
     confirmadas: orders.filter((o) => o.estado === 'confirmada').length,
     enviadas: orders.filter((o) => o.estado === 'enviada').length,

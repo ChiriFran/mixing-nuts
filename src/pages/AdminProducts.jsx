@@ -196,7 +196,13 @@ const AdminProducts = () => {
       closeForm();
     } catch (error) {
       console.error('Error saving product:', error);
-      alert('Error al guardar el producto');
+      if (error.code === 'storage/unauthorized') {
+        alert('Firebase Storage rechazó la imagen. Verificá que tu cuenta sea administradora y que las reglas de Storage estén desplegadas.');
+      } else if (error.code === 'storage/bucket-not-found') {
+        alert('No se encontró el bucket de Firebase Storage. Verificá que Storage esté habilitado y que VITE_FIREBASE_STORAGE_BUCKET sea correcto.');
+      } else {
+        alert(`Error al guardar el producto${error.code ? ` (${error.code})` : ''}: ${error.message || 'revisá la consola'}`);
+      }
     } finally {
       setSaving(false);
     }
